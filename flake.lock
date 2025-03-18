@@ -1,0 +1,48 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1742136038,
+        "narHash": "sha256-DDe16FJk18sadknQKKG/9FbwEro7A57tg9vB5kxZ8kY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a1185f4064c18a5db37c5c84e5638c78b46e3341",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "utilities": "utilities"
+      }
+    },
+    "utilities": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740823743,
+        "narHash": "sha256-G6BpQbLXkgYcAv5Of6VJA+r3QmpM2Eiopxsdn9UqcQY=",
+        "owner": "master-software-gmbh",
+        "repo": "nixos-utilities",
+        "rev": "d729caa5a71e8163f3ce04a412bc3be0b63cce08",
+        "type": "github"
+      },
+      "original": {
+        "owner": "master-software-gmbh",
+        "repo": "nixos-utilities",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
