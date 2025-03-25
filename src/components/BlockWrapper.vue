@@ -1,8 +1,8 @@
 <template>
-  <div class="block-wrapper" :class="{ dragging: isDragged }" :draggable="true" @dragstart="handleDragStart"
-    @dragend="handleDragEnd">
+  <div class="block-wrapper" :class="{ dragging: isDragged }">
     <slot></slot>
-    <div class="dragger" contenteditable="false"></div>
+    <div class="dragger" contenteditable="false" :draggable="true" @dragstart="handleDragStart"
+      @dragend="handleDragEnd"></div>
   </div>
 </template>
 

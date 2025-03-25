@@ -3,7 +3,9 @@
     <TitleBlock :title="document.title" />
 
     <div contenteditable="false">
-      <slot name="title" :onSave="handleSave" :onAddAudio="handleAddAudio"></slot>
+      <slot name="title" :onSave="handleSave" :onAddAudio="handleAddAudio" :onAddImage="handleAddImage"
+        :onFormatBold="() => handleFormatBold()" :onFormatItalic="() => handleFormatItalic()"
+        :onFormatUnderline="() => handleFormatUnderline()"></slot>
     </div>
 
     <template v-for="(block, index) in document.blocks">
@@ -28,20 +30,22 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import type { CmsFile } from '../types';
-import { Booleanish, insertString, KeyName } from '../utilities';
+import { Booleanish, KeyName } from '../utilities';
 import BlockInsertionTarget from './BlockInsertionTarget.vue';
 import FileBlock from './FileBlock.vue';
 import HeadingBlock from './HeadingBlock.vue';
 import RichTextBlock from './RichTextBlock.vue';
 import PlainTextBlock from './PlainTextBlock.vue';
 import TitleBlock from './TitleBlock.vue';
-import type { CmsDocument, FileRefBlock, RichTextSpan, StandardBlock } from 'bun-utilities/cms';
-import { HTMLBlockEditor, type EditorRangeAction, type Span } from '../editor';
+import type { FileRefBlock, StandardBlock, StandardDocument } from 'bun-utilities/cms';
+import { HTMLBlockEditor } from '../editor/html-editor';
 import UnknownBlock from './UnknownBlock.vue';
 import BlockWrapper from './BlockWrapper.vue';
 import { withConstantTime } from 'bun-utilities/time';
+import type { EditorState } from '../editor/types';
+import { logger } from 'bun-utilities/logging';
 
-const editor = new HTMLBlockEditor();
+const htmlEditor = new HTMLBlockEditor();
 
 export default defineComponent({
   props: {
@@ -60,7 +64,7 @@ export default defineComponent({
     console.log('Document:', document);
 
     return {
-      document: ref<CmsDocument>(document),
+      document: ref<StandardDocument>(document),
       files: ref<Record<string, CmsFile>>({}),
     };
   },
@@ -82,261 +86,30 @@ export default defineComponent({
     // Focus first block
   },
   methods: {
-    getBlockById(id: string) {
-      return this.document.blocks.find((block) => block.id === id);
-    },
-    getBlockSlice(startId?: string, endId?: string) {
-      let startIndex: number | undefined;
-      let endIndex: number | undefined;
-
-      if (startId) {
-        startIndex = this.document.blocks.findIndex((block) => block.id === startId);
-      }
-
-      if (endId) {
-        endIndex = this.document.blocks.findIndex((block) => block.id === endId);
-      }
-
-      console.log('Start index:', startIndex, startId);
-      console.log('End index:', endIndex, endId);
-
-      if (startIndex === -1 || endIndex === -1) {
-        return [];
-      }
-
-      return this.document.blocks.slice(startIndex, endIndex !== undefined ? endIndex + 1 : undefined);
-    },
-    getSpanAtOffset(spans: RichTextSpan[], offset: number): {
-      index: number;
-      offset: number;
-    } {
-      let remainingOffset = offset;
-      let index = 0;
-
-      console.log(spans, offset);
-
-      for (index; index <= spans.length; index++) {
-        const span = spans[index];
-
-        if (remainingOffset > span.text.length) {
-          remainingOffset -= span.text.length;
-        } else {
-          break;
-        }
-      }
-
-      return {
-        index,
-        offset: remainingOffset,
-      }
-    },
-    /**
-     * 
-     * @param range 
-     */
-    getBlocksAtRange(range: StaticRange): {
-      block: StandardBlock,
-      start?: number,
-      end?: number,
-    }[] {
-      const startContainer = range.startContainer;
-      const endContainer = range.endContainer;
-
-      console.log('Start container:', startContainer);
-      console.log('End container:', endContainer);
-
-      const startElement = editor.getElementAtNode(startContainer);
-      const endElement = editor.getElementAtNode(endContainer);
-
-      if (!startElement) {
-        // Start is outside of the editor
-        return [];
-      }
-
-      if (!endElement) {
-        // End is outside of the editor
-        return [];
-      }
-
-      console.log('Start element:', startElement);
-      console.log('End element:', endElement);
-
-      let startOffset = range.startOffset;
-
-      if (startElement.type === 'span') {
-        // Start offset is inside a span and should be adjusted
-        const block = this.getBlockById(startElement.blockId);
-
-        if (block && 'spans' in block.content) {
-
-          for (const [index, span] of block.content.spans.entries()) {
-            if (index < startElement.index) {
-              startOffset += span.text.length;
-            } else {
-              break;
-            }
-          }
-        }
-      }
-
-      let endOffset = range.endOffset;
-
-      if (endElement.type === 'span') {
-        // End offset is inside a span and should be adjusted
-        const block = this.getBlockById(endElement.blockId);
-
-        if (block && 'spans' in block.content) {
-          for (const [index, span] of block.content.spans.entries()) {
-            if (index < endElement.index) {
-              endOffset += span.text.length;
-            } else {
-              break;
-            }
-          }
-        }
-      }
-
-      const blocks = this.getBlockSlice(startElement?.blockId, endElement?.blockId);
-
-      console.log('blocks in range:', blocks);
-
-      return blocks.map((block, index) => {
-        return {
-          block,
-          start: index === 0 ? startOffset : undefined,
-          end: index === blocks.length - 1 ? endOffset : undefined,
-        }
-      })
-    },
-    splitSpansByRangeContainment(span: RichTextSpan, start: number, end: number): {
-      before: string,
-      inside: string,
-      after: string,
-    } {
-      const before = span.text.slice(0, start);
-      const inside = span.text.slice(start, end);
-      const after = span.text.slice(end);
-
-      return {
-        before,
-        inside,
-        after,
-      };
-    },
-    applyActionToBlockRange(blockId: string, action: EditorRangeAction) {
-      const block = this.getBlockById(blockId);
-
-      if (block?.type === 'plain-text') {
-        if (action.type === 'delete') {
-          const text = block.content.text;
-          const newText = text.slice(0, action.rangeStart) + text.slice(action.rangeEnd);
-          block.content.text = newText;
-        }
-      } else if (block?.type === 'rich-text') {
-        const spans = block.content.spans;
-
-        let currentOffset = 0;
-        const newSpans: RichTextSpan[] = [];
-
-        for (const span of spans) {
-          let relativeStart: number;
-          let relativeEnd: number;
-
-          if (action.rangeStart === undefined) {
-            relativeStart = 0;
-          } else {
-            relativeStart = Math.max(0, action.rangeStart - currentOffset);
-          }
-
-          if (action.rangeEnd === undefined) {
-            relativeEnd = span.text.length;
-          } else {
-            relativeEnd = Math.max(0, action.rangeEnd - currentOffset);
-          }
-
-          const {
-            before,
-            inside,
-            after,
-          } = this.splitSpansByRangeContainment(span, relativeStart, relativeEnd);
-
-          // console.log('Split spans:', span.text, relativeStart, relativeEnd, 'before', before, 'inside', inside, 'after', after);
-
-          if (before.length) {
-            newSpans.push({
-              ...span,
-              text: before,
-            });
-          }
-
-          switch (action.type) {
-            case 'set_attribute':
-              if (inside.length) {
-                newSpans.push({
-                  ...span,
-                  text: inside,
-                  attributes: {
-                    ...span.attributes,
-                    [action.name]: action.value,
-                  },
-                });
-              }
-              break;
-            case 'toggle_attribute':
-              if (inside.length) {
-                newSpans.push({
-                  ...span,
-                  text: inside,
-                  attributes: {
-                    ...span.attributes,
-                    [action.name]: !Boolean(span.attributes[action.name]),
-                  },
-                });
-              }
-              break;
-            case 'delete':
-              // Do not add the inside span
-              break;
-          }
-
-          if (after.length) {
-            newSpans.push({
-              ...span,
-              text: after,
-            });
-          }
-
-          currentOffset += span.text.length;
-        }
-
-        // TODO: Optimize by merging spans with the same attributes
-
-        block.content.spans = newSpans;
-      }
-    },
     handleBeforeInput(event: InputEvent) {
       const range = event.getTargetRanges().at(0);
 
       if (!range) {
-        console.warn('Received beforeinput event without range', event);
+        logger.warn('Received beforeinput event without range', { type: event.inputType });
         return;
       }
 
+      const data = this.getPlainInputData(event);
+
       switch (event.inputType) {
-        case 'insertText':
-          if (!event.data) return;
+        case 'insertText': {
+          if (!data) return;
           event.preventDefault();
-          return this.handleInsertText(range, event.data);
+          return this.handleInsertText(range, data);
+        }
         case 'insertLineBreak':
-          event.preventDefault();
-          return this.handleInsertParagraph(range);
         case 'insertParagraph':
           event.preventDefault();
           return this.handleInsertParagraph(range);
         case 'insertFromPaste':
-          if (!event.dataTransfer) return;
+          if (!data) return;
           event.preventDefault();
-          return this.handlePaste(range, event.dataTransfer.items);
+          return this.handlePaste(range, data);
         case 'formatBold':
           event.preventDefault();
           return this.handleFormatBold(range);
@@ -349,99 +122,80 @@ export default defineComponent({
         case 'deleteContentBackward':
           event.preventDefault();
           return this.handleDeleteContentBackward(range);
+        case 'insertReplacementText':
+          if (!data) return;
+          event.preventDefault();
+          return this.handleInsertText(range, data);
         case 'deleteByCut':
         case 'deleteSoftLineBackward':
           return;
+        default:
+          logger.warn('Unhandled beforeinput event', { type: event.inputType });
+          event.preventDefault();
       }
     },
-    insertTextToSpan(element: Span, range: StaticRange, text: string) {
-      const block = this.getBlockById(element.blockId);
-
-      if (!block) {
-        console.warn('Block not found for element:', element);
-        return;
+    getPlainInputData(event: InputEvent): string | undefined {
+      if (event.data) {
+        return event.data;
       }
 
-      console.log(`Insert text at block ${element.blockId} of span ${element.index} at offset ${range.startOffset}`);
-
-      // const restore = range.startContainer.parentElement && editor.saveCursorPosition(range.startContainer.parentElement);
-
-      switch (block.type) {
-        case 'rich-text':
-          block.content.spans[element.index].text = insertString(block.content.spans[element.index].text, range.startOffset, text);
-          break;
-      }
-
-      this.$nextTick(() => {
-        // restore?.(1);
-        this.recoverCursor({
-          block,
-          start: range.startOffset + text.length,
-        })
-      });
+      return event.dataTransfer?.getData("text/plain");
+    },
+    handleFormatBold(range?: StaticRange) {
+      const newState = htmlEditor.applyRangeAction(
+        this.document,
+        {
+          type: 'set_attribute',
+          name: 'bold',
+          value: true,
+        },
+        range,
+      );
+      this.updateEditorState(newState);
+    },
+    handleFormatItalic(range?: StaticRange) {
+      const newState = htmlEditor.applyRangeAction(
+        this.document,
+        {
+          type: 'set_attribute',
+          name: 'italic',
+          value: true,
+        },
+        range,
+      );
+      this.updateEditorState(newState);
+    },
+    handleFormatUnderline(range?: StaticRange) {
+      const newState = htmlEditor.applyRangeAction(
+        this.document,
+        {
+          type: 'set_attribute',
+          name: 'underline',
+          value: true,
+        },
+        range,
+      );
+      this.updateEditorState(newState);
+    },
+    handleDeleteContentBackward(range: StaticRange) {
+      const newState = htmlEditor.applyRangeAction(this.document, {
+        type: 'delete_text',
+      }, range);
+      this.updateEditorState(newState);
     },
     handleInsertText(range: StaticRange, text: string) {
-      console.log('Insert text:', text, range);
-
-      if (range.collapsed) {
-        const element = editor.getElementAtNode(range.startContainer);
-
-        if (!element) {
-          console.warn('No element found at range start:', range);
-          return;
-        }
-
-        // Insert text at the current element
-
-        if (element?.type === 'span') {
-          this.insertTextToSpan(element, range, text);
-        } else {
-          console.warn('Skipping insertion at element', element);
-
-          if (range.startOffset === 0) {
-            this.insertTextToSpan({
-              index: 0,
-              type: 'span',
-              blockId: element.blockId,
-            }, range, text);
-          }
-        }
-      } else {
-        // Replace selected text with the new text
-        console.log('Replacing text in range ', range.startContainer, range.startOffset, range.endContainer, range.endOffset);
-      }
+      const newState = htmlEditor.applyRangeAction(this.document, {
+        type: 'insert_text',
+        text: text,
+      }, range);
+      this.updateEditorState(newState);
     },
     handleInsertParagraph(range: StaticRange) {
-      console.log('Insert paragraph');
+      const newState = htmlEditor.applyRangeAction(this.document, {
+        type: 'insert_paragraph',
+      }, range);
 
-      if (range.collapsed) {
-        // Insert new empty block after the current one
-        const blocks = this.getBlocksAtRange(range);
-
-        const newBlock: StandardBlock = {
-          type: 'rich-text',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          id: crypto.randomUUID(),
-          documentId: this.document.id,
-          content: {
-            text: "",
-            spans: [
-              {
-                text: "",
-                attributes: {}
-              }
-            ],
-          }
-        }
-
-        this.insertBlock(newBlock, blocks[0].block.id);
-
-        this.recoverCursor({
-          block: newBlock,
-          start: 0,
-        })
-      }
+      this.updateEditorState(newState);
     },
     insertBlock(block: StandardBlock, afterId?: string) {
       let index = this.document.blocks.length;
@@ -452,193 +206,25 @@ export default defineComponent({
 
       this.document.blocks.splice(index, 0, block);
     },
-    handlePaste(range: StaticRange, items: DataTransferItemList | undefined) {
-      if (!items) {
-        return;
-      }
+    handlePaste(range: StaticRange, data: string) {
+      const newState = htmlEditor.applyRangeAction(this.document, {
+        type: 'insert_text',
+        text: data,
+      }, range);
 
-      console.log('Paste event:', items);
+      this.updateEditorState(newState);
     },
-    recoverCursor(block: {
-      block: StandardBlock,
-      start?: number,
-    }) {
-      if (block.block.type === 'rich-text') {
-        const { index: startIndex, offset: startOffset } = this.getSpanAtOffset(block.block.content.spans, (block.start ?? 0));
-        console.log('Original selection is starting at span', startIndex);
-
-        this.$nextTick(() => {
-          const selection = window.getSelection();
-          const range = selection?.getRangeAt(0);
-
-          if (range) {
-            let startElement: Node | null | undefined = document
-              .querySelector(`[data-block-id="${block.block.id}"]`)
-              ?.querySelector(`[data-span-index="${startIndex}"]`);
-
-            if (startElement?.childNodes.length) {
-              startElement = startElement.firstChild;
-            }
-
-            if (startElement) {
-              range.setStart(startElement, startOffset);
-              range.setEnd(startElement, startOffset);
-            }
-          }
-        })
-      } else {
-        this.$nextTick(() => {
-          const selection = window.getSelection();
-          const range = selection?.getRangeAt(0);
-
-          if (range) {
-            const startElement = document
-              .querySelector(`[data-block-id="${block.block.id}"]`)
-              ?.querySelector(`[data-editing-mode="plain"]`)
-              ?.firstChild;
-
-            if (startElement) {
-              range.setStart(startElement, block.start ?? 0);
-              range.setEnd(startElement, block.start ?? 0);
-            }
-          }
-        });
-      }
-    },
-    recoverSelection(startBlock: {
-      block: StandardBlock,
-      start?: number,
-    }, endBlock: {
-      block: StandardBlock,
-      end?: number,
-    }) {
-      // Get the text nodes corresponding to the start and end of the block selection
-      // The original range containers might have changed due to the formatting
-
-      if (startBlock.block.type === 'rich-text') {
-        const { index: startIndex, offset: startOffset } = this.getSpanAtOffset(startBlock.block.content.spans, (startBlock.start ?? 0));
-        console.log('Original selection is starting at span', startIndex);
-
-        if (endBlock.block.type === 'rich-text') {
-          const { index: endIndex, offset: endOffset } = this.getSpanAtOffset(endBlock.block.content.spans, (endBlock.end ?? 0));
-          console.log('Original selection is ending at span', endIndex);
-
-          this.$nextTick(() => {
-            const selection = window.getSelection();
-            const range = selection?.getRangeAt(0);
-
-            if (range) {
-              const startElement = document
-                .querySelector(`[data-block-id="${startBlock.block.id}"]`)
-                ?.querySelector(`[data-span-index="${startIndex}"]`)
-                ?.firstChild;
-
-              const endElement = document
-                .querySelector(`[data-block-id="${endBlock.block.id}"]`)
-                ?.querySelector(`[data-span-index="${endIndex}"]`)
-                ?.firstChild;
-
-              if (startElement && endElement) {
-                range.setStart(startElement, startOffset);
-                range.setEnd(endElement, endOffset);
-              }
-            }
-          })
-        }
-      }
-    },
-    handleFormatBold(range: StaticRange) {
-      console.log('Format bold');
-
-      const blocks = this.getBlocksAtRange(range);
-
-      console.log('Blocks in range:', blocks);
-
-      for (const block of blocks) {
-        this.applyActionToBlockRange(block.block.id, {
-          type: 'toggle_attribute',
-          name: 'bold',
-          rangeStart: block.start,
-          rangeEnd: block.end,
-        });
-      }
-
-      this.recoverSelection(blocks[0], blocks[blocks.length - 1]);
-    },
-    handleFormatItalic(range: StaticRange) {
-      console.log('Format italic');
-
-      const blocks = this.getBlocksAtRange(range);
-
-      console.log('Blocks in range:', blocks);
-
-      for (const block of blocks) {
-        this.applyActionToBlockRange(block.block.id, {
-          type: 'toggle_attribute',
-          name: 'italic',
-          rangeStart: block.start,
-          rangeEnd: block.end,
-        })
-      }
-
-      this.recoverSelection(blocks[0], blocks[blocks.length - 1]);
-    },
-    handleFormatUnderline(range: StaticRange) {
-      console.log('Format underline');
-
-      const blocks = this.getBlocksAtRange(range);
-
-      console.log('Blocks in range:', blocks);
-
-      for (const block of blocks) {
-        this.applyActionToBlockRange(block.block.id, {
-          type: 'toggle_attribute',
-          name: 'underline',
-          rangeStart: block.start,
-          rangeEnd: block.end,
-        })
-      }
-
-      this.recoverSelection(blocks[0], blocks[blocks.length - 1]);
-    },
-    handleDeleteContentBackward(range: StaticRange) {
-      console.log('Delete content backward');
-
-      const blocks = this.getBlocksAtRange(range);
-
-      console.log('Blocks in range:', blocks);
-
-      if (blocks.length) {
-        for (const block of blocks) {
-          this.applyActionToBlockRange(block.block.id, {
-            type: 'delete',
-            rangeStart: block.start,
-            rangeEnd: block.end,
-          });
-        }
-
-        this.recoverCursor(blocks[0]);
-      } else {
-
-      }
+    updateEditorState(state: EditorState) {
+      this.document = state.document;
+      this.$nextTick(() => htmlEditor.updateWindowSelection(state.selection));
     },
     handleMove(blockId: string, toIndex: number) {
-      const blockToMove = this.getBlockById(blockId);
-
-      if (blockToMove) {
-        const fromIndex = this.document.blocks.indexOf(blockToMove);
-
-        if (fromIndex > -1) {
-          if (fromIndex < toIndex) {
-            toIndex -= 1;
-          }
-
-          console.log(`Moving block ${blockId} from ${fromIndex} to ${toIndex}`);
-
-          this.document.blocks.splice(fromIndex, 1);
-          this.document.blocks.splice(toIndex, 0, blockToMove);
-        }
-      }
+      const newState = htmlEditor.applyAction(this.document, {
+        id: blockId,
+        index: toIndex,
+        type: 'move_block',
+      });
+      this.updateEditorState(newState);
     },
     handleKeydown(event: KeyboardEvent) {
       const withSpecialKey = event.shiftKey || event.altKey || event.metaKey || event.ctrlKey;
@@ -663,22 +249,58 @@ export default defineComponent({
       }
     },
     handleArrowUpKey() {
-      console.log('Arrow Up key pressed');
+      logger.debug('Arrow Up key pressed');
     },
     handleArrowDownKey() {
-      console.log('Arrow Down key pressed');
+      logger.debug('Arrow Down key pressed');
     },
     handleArrowLeftKey() {
-      console.log('Arrow Left key pressed');
+      logger.debug('Arrow Left key pressed');
     },
     handleArrowRightKey() {
-      console.log('Arrow Right key pressed');
+      logger.debug('Arrow Right key pressed');
     },
     handleSelectAll() {
-      console.log('Select All pressed');
+      logger.debug('Select All pressed');
     },
     handleSave() {
       this.$root?.$data.onSave(this.document);
+    },
+    handleAddImage(event: Event) {
+      if (event.target instanceof HTMLInputElement && event.target.files) {
+        for (let i = 0; i < event.target.files.length; i++) {
+          const file = event.target.files.item(i);
+
+          if (!file) {
+            return;
+          }
+
+          const fileId = crypto.randomUUID();
+
+          this.files[fileId] = {
+            state: 'pending',
+            type: 'image',
+            source: file,
+          };
+
+          const newBlock: FileRefBlock = {
+            id: crypto.randomUUID(),
+            type: 'file-ref',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            documentId: this.document.id,
+            content: {
+              id: fileId,
+              name: file.name,
+              type: file.type,
+            },
+          };
+
+          this.insertBlock(newBlock);
+
+          this.uploadFile(fileId);
+        }
+      }
     },
     handleAddAudio(event: Event) {
       if (event.target instanceof HTMLInputElement && event.target.files) {
@@ -719,7 +341,7 @@ export default defineComponent({
       const file = this.files[id];
 
       if (!file) {
-        console.warn('File not found', id);
+        logger.warn('File not found', { id });
         return;
       }
 

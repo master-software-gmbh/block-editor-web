@@ -6,9 +6,6 @@
       {{ span.text }}
     </span>
   </div>
-  <!-- <code>
-      {{ JSON.stringify(block, null, 2) }}
-    </code> -->
 </template>
 
 <script lang="ts">

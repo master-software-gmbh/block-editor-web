@@ -1,6 +1,6 @@
 <template>
   <div :class="{ dragging }" data-element="insertion-target" contenteditable="false">
-    <div @dragenter="handleDragEnter" @dragover="handleDragOver" @dragleave="handleDragLeave" @drop="handleDrop" />
+    <div @dragenter="handleDragEnter" @dragover="handleDragOver" @dragleave="handleDragLeave" @drop="handleDrop"></div>
   </div>
 </template>
 

@@ -8,11 +8,13 @@
     "build": "vite build"
   },
   "dependencies": {
-    "bun-utilities": "master-software-gmbh/bun-utilities#v1.45.1",
+    "bun-utilities": "master-software-gmbh/bun-utilities#v1.46.0",
     "valibot": "^1.0.0-rc.4",
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^17.4.4",
+    "@types/bun": "^1.2.5",
     "@types/node": "^22.13.9",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
