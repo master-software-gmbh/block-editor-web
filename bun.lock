@@ -4,7 +4,7 @@
     "": {
       "name": "@master-software/block-editor-web",
       "dependencies": {
-        "bun-utilities": "master-software-gmbh/bun-utilities#v1.46.0",
+        "bun-utilities": "master-software-gmbh/bun-utilities#v1.47.0",
         "valibot": "^1.0.0-rc.4",
         "vue": "^3.5.13",
       },
@@ -173,7 +173,7 @@
 
     "bun-types": ["bun-types@1.2.5", "", { "dependencies": { "@types/node": "*", "@types/ws": "~8.5.10" } }, "sha512-3oO6LVGGRRKI4kHINx5PIdIgnLRb7l/SprhzqXapmoYkFl5m4j6EvALvbDVuuBFaamB46Ap6HCUxIXNLCGy+tg=="],
 
-    "bun-utilities": ["@master-software/bun-utilities@github:master-software-gmbh/bun-utilities#ee1fe95", { "dependencies": { "@standard-schema/spec": "^1.0.0", "@standard-schema/utils": "^0.3.0", "valibot": "^1.0.0-rc.3" }, "peerDependencies": { "jszip": "^3.10.1", "kysely": "^0.27.5", "kysely-codegen": "^0.18.0", "mjml": "^4.15.3" }, "optionalPeers": ["jszip", "kysely", "kysely-codegen", "mjml"] }, "master-software-gmbh-bun-utilities-ee1fe95"],
+    "bun-utilities": ["@master-software/bun-utilities@github:master-software-gmbh/bun-utilities#2384e79", { "dependencies": { "@standard-schema/spec": "^1.0.0", "@standard-schema/utils": "^0.3.0", "valibot": "^1.0.0-rc.3" }, "peerDependencies": { "jszip": "^3.10.1", "kysely": "^0.27.5", "kysely-codegen": "^0.18.0", "mjml": "^4.15.3" }, "optionalPeers": ["jszip", "kysely", "kysely-codegen", "mjml"] }, "master-software-gmbh-bun-utilities-2384e79"],
 
     "csstype": ["csstype@3.1.3", "", {}, "sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw=="],
 
