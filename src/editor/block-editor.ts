@@ -14,12 +14,17 @@ logger.format = 'logfmt';
 
 type Span = RichTextBlock['content']['spans'][number];
 
+const insecureUuidFactor = () =>
+  '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c) =>
+    (+c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))).toString(16),
+  );
+
 export class BlockEditor {
   private readonly uuidFactory: () => string;
   private readonly dateFactory: () => Date;
 
   constructor(uuidFactory?: () => string, dateFactory?: () => Date) {
-    this.uuidFactory = uuidFactory ?? crypto.randomUUID.bind(crypto);
+    this.uuidFactory = uuidFactory ?? insecureUuidFactor;
     this.dateFactory = dateFactory ?? (() => new Date());
   }
 
@@ -247,6 +252,23 @@ export class BlockEditor {
     };
 
     let currentBlock: RichTextBlock | undefined;
+
+    for (const range of state.selection) {
+      if (range.type !== 'rich_text') {
+        if (range.type === 'title') {
+          const cleanText = text.replace(/\n/g, '');
+          state.document.title = state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
+
+          newSelection = [
+            {
+              type: 'title',
+              startOffset: range.startOffset + cleanText.length,
+              endOffset: range.startOffset + cleanText.length,
+            },
+          ];
+        }
+      }
+    }
 
     // Iterate over each block in the document
     for (const block of state.document.blocks) {

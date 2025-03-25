@@ -29,7 +29,7 @@ export default defineComponent({
   column-gap: 1rem;
 
   img {
-    border-radius: 4px;
+    border-radius: var(--internal-block-editor-border-radius);
     width: 75px;
     height: 75px;
   }

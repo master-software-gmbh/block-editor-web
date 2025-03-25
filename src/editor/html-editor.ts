@@ -85,6 +85,17 @@ export class HTMLBlockEditor {
     const lastElement = range.at(-1);
 
     if (firstElement?.type !== 'rich_text' || lastElement?.type !== 'rich_text') {
+      const title = document.querySelector('[data-element="title"]');
+
+      if (title) {
+        const child = this.findTextChild(title);
+
+        if (child) {
+          selection.setStart(child, firstElement?.startOffset ?? 0);
+          selection.setEnd(child, lastElement?.endOffset ?? 0);
+        }
+      }
+
       return selection;
     }
 
@@ -160,7 +171,13 @@ export class HTMLBlockEditor {
     }
 
     if (startElement.type !== 'span' || endElement.type !== 'span') {
-      return [];
+      return [
+        {
+          type: 'title',
+          startOffset: range.startOffset,
+          endOffset: range.endOffset,
+        },
+      ];
     }
 
     if (startElement.blockId === endElement.blockId && startElement.index === endElement.index) {

@@ -31,7 +31,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css" scoped>
+<style lang="css">
 [data-block-type="rich-text"] {
   margin: 0.5rem 0;
   min-height: 1em;

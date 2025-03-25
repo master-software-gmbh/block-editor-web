@@ -41,8 +41,8 @@ export default defineComponent({
 [data-element="insertion-target"] {
   position: relative;
   height: 6px;
-  border-radius: 1px;
-  background-color: var(--block-editor-color-primary);
+  border-radius: var(--internal-block-editor-border-radius);
+  background-color: var(--internal-block-editor-color-primary);
   transition: opacity 0.2s;
   opacity: 0;
 

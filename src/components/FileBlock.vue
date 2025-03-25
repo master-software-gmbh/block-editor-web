@@ -1,9 +1,9 @@
 <template>
-  <div data-element="block" :data-block-id="block.id" :data-block-type="block.type">
+  <div data-element="block" :data-block-id="block.id" :data-block-type="block.type" contenteditable="false">
     <template v-if="!file || file?.state === 'uploaded'">
       <AudioPlayer v-if="block.content.type.startsWith('audio')" :source="sourceUrl" :type="block.content.type">
         <div class="row">
-          <div data-placeholder="Titel">
+          <div data-placeholder="Titel" contenteditable="true">
             {{ block.content.name }}
           </div>
           <button type="button" @click="$emit('remove', block.id)" data-display="plain"
@@ -11,8 +11,8 @@
         </div>
       </AudioPlayer>
       <ImagePreview v-else-if="block.content.type.startsWith('image')" :source="sourceUrl" :type="block.content.type">
-        <div class="row">
-          <div data-placeholder="Titel">
+        <div class="column">
+          <div data-placeholder="Titel" contenteditable="true">
             {{ block.content.name }}
           </div>
           <button type="button" @click="$emit('remove', block.id)" data-display="plain"
@@ -65,7 +65,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css" scoped>
+<style lang="css">
 [data-block-type="file-ref"] {
   display: flex;
   column-gap: 0.5rem;
@@ -73,12 +73,16 @@ export default defineComponent({
 
   border-radius: 4px;
   padding: 0.75rem;
-  border: 1px solid var(--block-editor-color-secondary);
+  border: 1px solid var(--internal-block-editor-color-secondary);
 
   svg {
     width: 40px;
     height: 40px;
-    color: var(--block-editor-color-primary);
+    color: var(--internal-block-editor-color-primary);
+  }
+
+  .column {
+    width: 100%;
   }
 }
 </style>

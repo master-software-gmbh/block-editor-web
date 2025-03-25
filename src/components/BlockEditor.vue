@@ -1,5 +1,5 @@
 <template>
-  <div data-element="editor" contenteditable @beforeinput="handleBeforeInput" @keydown="handleKeydown">
+  <div data-element="editor" contenteditable="true" @beforeinput="handleBeforeInput" @keydown="handleKeydown">
     <TitleBlock :title="document.title" />
 
     <div contenteditable="false">
@@ -11,8 +11,7 @@
     <template v-for="(block, index) in document.blocks">
       <BlockInsertionTarget @move="(id) => handleMove(id, index)" />
       <BlockWrapper :block-id="block.id">
-        <PlainTextBlock v-if="block.type === 'plain-text'" :block="block" />
-        <RichTextBlock v-else-if="block.type === 'rich-text'" :block="block" />
+        <RichTextBlock v-if="block.type === 'rich-text'" :block="block" />
         <HeadingBlock v-else-if="block.type === 'heading'" :block="block" />
         <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]" />
         <UnknownBlock v-else="block.type" :block="block" />
@@ -24,6 +23,9 @@
     <div contenteditable="false">
       <slot name="bottom" :onSave="handleSave"></slot>
     </div>
+
+    <RichTextFloatingBar @formatBold="handleFormatBold" @formatItalic="handleFormatItalic"
+      @formatUnderline="handleFormatUnderline" />
   </div>
 </template>
 
@@ -41,9 +43,10 @@ import type { FileRefBlock, StandardBlock, StandardDocument } from 'bun-utilitie
 import { HTMLBlockEditor } from '../editor/html-editor';
 import UnknownBlock from './UnknownBlock.vue';
 import BlockWrapper from './BlockWrapper.vue';
-import { withConstantTime } from 'bun-utilities/time';
+import { debounce, withConstantTime } from 'bun-utilities/time';
 import type { EditorState } from '../editor/types';
 import { logger } from 'bun-utilities/logging';
+import RichTextFloatingBar from './RichTextFloatingBar.vue';
 
 const htmlEditor = new HTMLBlockEditor();
 
@@ -64,6 +67,7 @@ export default defineComponent({
     console.log('Document:', document);
 
     return {
+      dirty: ref(false),
       document: ref<StandardDocument>(document),
       files: ref<Record<string, CmsFile>>({}),
     };
@@ -84,9 +88,23 @@ export default defineComponent({
   },
   mounted() {
     // Focus first block
+
+    // Listen for selection changes
+    const debouncedSelectionChange = debounce(this.handleSelectionChange, 150);
+    document.addEventListener("selectionchange", debouncedSelectionChange);
+
+    // Trigger warning when navigating away
+    window.addEventListener("beforeunload", (event) => {
+      if (this.dirty) {
+        event.preventDefault();
+        event.returnValue = "You have unsaved changes. Are you sure you want to leave?";
+        return event.returnValue;
+      }
+    });
   },
   methods: {
     handleBeforeInput(event: InputEvent) {
+      event.preventDefault();
       const range = event.getTargetRanges().at(0);
 
       if (!range) {
@@ -99,40 +117,57 @@ export default defineComponent({
       switch (event.inputType) {
         case 'insertText': {
           if (!data) return;
-          event.preventDefault();
           return this.handleInsertText(range, data);
         }
         case 'insertLineBreak':
         case 'insertParagraph':
-          event.preventDefault();
           return this.handleInsertParagraph(range);
         case 'insertFromPaste':
           if (!data) return;
-          event.preventDefault();
           return this.handlePaste(range, data);
         case 'formatBold':
-          event.preventDefault();
           return this.handleFormatBold(range);
         case 'formatItalic':
-          event.preventDefault();
           return this.handleFormatItalic(range);
         case 'formatUnderline':
-          event.preventDefault();
           return this.handleFormatUnderline(range);
         case 'deleteContentBackward':
-          event.preventDefault();
+        case 'deleteByCut':
           return this.handleDeleteContentBackward(range);
         case 'insertReplacementText':
           if (!data) return;
-          event.preventDefault();
           return this.handleInsertText(range, data);
-        case 'deleteByCut':
-        case 'deleteSoftLineBackward':
-          return;
         default:
           logger.warn('Unhandled beforeinput event', { type: event.inputType });
-          event.preventDefault();
       }
+    },
+    handleSelectionChange() {
+      const selection = window.getSelection();
+
+      if (!selection) {
+        logger.warn('Selection is null');
+        return;
+      }
+
+      const range = selection.getRangeAt(0);
+      const floatingBar = document.getElementById('floating-bar');
+
+      if (!floatingBar) {
+        return;
+      }
+
+      if (range.collapsed) {
+        // Hide floating bar
+        floatingBar.style.display = 'none';
+        return;
+      }
+
+      floatingBar.style.display = 'flex';
+
+      const rect = range.getBoundingClientRect();
+      floatingBar.style.top = `${rect.top + window.scrollY - floatingBar.offsetHeight - 10}px`;
+      floatingBar.style.left = `${rect.left + window.scrollX - 10}px`;
+
     },
     getPlainInputData(event: InputEvent): string | undefined {
       if (event.data) {
@@ -216,6 +251,7 @@ export default defineComponent({
     },
     updateEditorState(state: EditorState) {
       this.document = state.document;
+      this.dirty = true;
       this.$nextTick(() => htmlEditor.updateWindowSelection(state.selection));
     },
     handleMove(blockId: string, toIndex: number) {
@@ -363,6 +399,7 @@ export default defineComponent({
     BlockWrapper,
     RichTextBlock,
     PlainTextBlock,
+    RichTextFloatingBar,
     BlockInsertionTarget,
   },
 });

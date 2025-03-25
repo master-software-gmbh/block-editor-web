@@ -88,8 +88,8 @@ export default defineComponent({
 <style lang="css" scoped>
 .audio-player {
   --player-height: 10px;
-  --player-border-radius: 2px;
-  --player-background: var(--block-editor-color-tertiary);
+  --player-border-radius: var(--internal-block-editor-border-radius);
+  --player-background: var(--internal-block-editor-color-tertiary);
 
   width: 100%;
   display: flex;
@@ -101,7 +101,7 @@ export default defineComponent({
 svg {
   width: 40px;
   height: 40px;
-  color: var(--block-editor-color-primary);
+  color: var(--internal-block-editor-color-primary);
 }
 
 .column {
@@ -136,12 +136,12 @@ progress {
   }
 
   &::-webkit-progress-value {
-    background: var(--block-editor-color-primary);
+    background: var(--internal-block-editor-color-primary);
     border-radius: var(--player-border-radius) 0 0 var(--player-border-radius);
   }
 
   &::-moz-progress-bar {
-    background: var(--block-editor-color-primary);
+    background: var(--internal-block-editor-color-primary);
     border-radius: var(--player-border-radius) 0 0 var(--player-border-radius);
   }
 }

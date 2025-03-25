@@ -24,10 +24,7 @@ export default defineComponent({
 
 <style lang="css" scoped>
 [data-element="title"] {
-  h1 {
-    min-height: 1em;
-    margin-left: 0;
-    margin-bottom: 0.5rem;
-  }
+  min-height: 1em;
+  margin: 0.25em 0 0.5rem;
 }
 </style>
