@@ -29,9 +29,11 @@ export default defineComponent({
   column-gap: 1rem;
 
   img {
-    border-radius: var(--internal-block-editor-border-radius);
     width: 75px;
     height: 75px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: var(--internal-block-editor-border-radius);
   }
 }
 </style>
