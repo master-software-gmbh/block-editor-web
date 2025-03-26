@@ -45,6 +45,10 @@ export type BlockEditorAction =
       value: RichTextAttributeType;
     }
   | {
+      type: 'toggle_attribute';
+      name: string;
+    }
+  | {
       type: 'move_block';
       id: string;
       index: number;

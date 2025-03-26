@@ -36,6 +36,11 @@ export class BlockEditor {
         return this.replaceText(state, '');
       case 'set_attribute':
         return this.applyAttributes(state, { [action.name]: action.value });
+      case 'toggle_attribute': {
+        const currentValue = Boolean(this.getRangeAttribute(state, action.name));
+        const newValue = !currentValue;
+        return this.applyAttributes(state, { [action.name]: newValue });
+      }
       case 'move_block':
         return this.moveBlock(state, action.id, action.index);
       case 'insert_paragraph':
@@ -43,6 +48,26 @@ export class BlockEditor {
       default:
         return state;
     }
+  }
+
+  getRangeAttribute(state: EditorState, name: string): boolean {
+    for (const range of state.selection) {
+      if (range.type !== 'rich_text') {
+        continue;
+      }
+
+      const block = this.getBlockById(state.document, range.blockId);
+
+      if (block?.type === 'rich-text') {
+        const span = block.content.spans.at(range.spanIndex);
+
+        if (!span?.attributes[name]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   private moveBlock(state: EditorState, id: string, index: number): EditorState {
@@ -257,7 +282,8 @@ export class BlockEditor {
       if (range.type !== 'rich_text') {
         if (range.type === 'title') {
           const cleanText = text.replace(/\n/g, '');
-          state.document.title = state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
+          state.document.title =
+            state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
 
           newSelection = [
             {

@@ -180,9 +180,8 @@ export default defineComponent({
       const newState = htmlEditor.applyRangeAction(
         this.document,
         {
-          type: 'set_attribute',
+          type: 'toggle_attribute',
           name: 'bold',
-          value: true,
         },
         range,
       );
@@ -192,9 +191,8 @@ export default defineComponent({
       const newState = htmlEditor.applyRangeAction(
         this.document,
         {
-          type: 'set_attribute',
+          type: 'toggle_attribute',
           name: 'italic',
-          value: true,
         },
         range,
       );
@@ -204,9 +202,8 @@ export default defineComponent({
       const newState = htmlEditor.applyRangeAction(
         this.document,
         {
-          type: 'set_attribute',
+          type: 'toggle_attribute',
           name: 'underline',
-          value: true,
         },
         range,
       );

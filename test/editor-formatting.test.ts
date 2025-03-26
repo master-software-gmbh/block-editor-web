@@ -2,10 +2,11 @@ import { describe, expect, it } from 'bun:test';
 import { EditorState, type BlockEditorAction } from '../src/editor/types';
 import { BlockEditor } from '../src/editor/block-editor';
 
+const editor = new BlockEditor();
 const date = new Date();
 const documentId = '95f20aea-f289-4046-aa82-966338f6a0f0';
 
-describe('BlockEditor', () => {
+describe('set_attribute', () => {
   it('should format a single span', () => {
     const blockId = crypto.randomUUID();
 
@@ -92,9 +93,7 @@ describe('BlockEditor', () => {
       value: true,
     };
 
-    const editor = new BlockEditor();
     const newState = editor.applyAction(state, action);
-
     expect(newState).toEqual(expectedState);
   });
 
@@ -192,9 +191,7 @@ describe('BlockEditor', () => {
       value: true,
     };
 
-    const editor = new BlockEditor();
     const newState = editor.applyAction(state, action);
-
     expect(newState).toEqual(expectedState);
   });
 
@@ -296,9 +293,116 @@ describe('BlockEditor', () => {
       value: true,
     };
 
-    const editor = new BlockEditor();
     const newState = editor.applyAction(state, action);
-
     expect(newState).toEqual(expectedState);
+  });
+});
+
+describe('get_attribute', () => {
+  it('should handle a single span', () => {
+    const blockId = crypto.randomUUID();
+
+    const state = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            createdAt: date,
+            updatedAt: date,
+            id: blockId,
+            documentId: documentId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello world',
+                  attributes: {
+                    underline: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'rich_text',
+          blockId: blockId,
+          spanIndex: 0,
+          startOffset: 0,
+          endOffset: 11,
+        },
+      ],
+    );
+
+    expect(editor.getRangeAttribute(state, 'bold')).toBe(false);
+    expect(editor.getRangeAttribute(state, 'underline')).toBe(true);
+  });
+
+  it('should handle multiple spans', () => {
+    const blockId = crypto.randomUUID();
+
+    const state = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            createdAt: date,
+            updatedAt: date,
+            id: blockId,
+            documentId: documentId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello ',
+                  attributes: {
+                    underline: true,
+                    italic: true,
+                  },
+                },
+                {
+                  text: 'world',
+                  attributes: {
+                    underline: false,
+                    bold: true,
+                    italic: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'rich_text',
+          blockId: blockId,
+          spanIndex: 0,
+          startOffset: 0,
+          endOffset: 6,
+        },
+        {
+          type: 'rich_text',
+          blockId: blockId,
+          spanIndex: 1,
+          startOffset: 0,
+          endOffset: 5,
+        },
+      ],
+    );
+
+    expect(editor.getRangeAttribute(state, 'bold')).toBe(false);
+    expect(editor.getRangeAttribute(state, 'italic')).toBe(true);
+    expect(editor.getRangeAttribute(state, 'underline')).toBe(false);
   });
 });
