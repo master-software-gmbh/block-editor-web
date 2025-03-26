@@ -260,7 +260,7 @@ export class BlockEditor {
   }
 
   private replaceText(state: EditorState, text: string): EditorState {
-    logger.debug(`Replacing text with "${text}"`);
+    logger.info(`Replacing text with "${text}"`);
 
     const updatedBlocks: StandardBlock[] = [];
     let newSelection: EditorRange = [];

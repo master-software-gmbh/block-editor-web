@@ -150,14 +150,18 @@ export default defineComponent({
         return;
       }
 
-      const range = selection.getRangeAt(0);
       const floatingBar = document.getElementById('floating-bar');
 
       if (!floatingBar) {
         return;
       }
 
-      if (range.collapsed) {
+      const range = selection.getRangeAt(0);
+      const editorRange = htmlEditor.selectionToEditorRange(this.document, range);
+
+      const includesRichText = editorRange.find((block) => block.type === 'rich_text');
+
+      if (!includesRichText || range.collapsed) {
         // Hide floating bar
         floatingBar.style.display = 'none';
         return;

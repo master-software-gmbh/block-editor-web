@@ -44,12 +44,17 @@ export type EditorRangeAction = {
 export class HTMLBlockEditor {
   readonly blockEditor = new BlockEditor();
 
-  applyAction(document: StandardDocument, action: BlockEditorAction, range?: StaticRange): EditorState {
+  applyAction(document: StandardDocument, action: BlockEditorAction): EditorState {
     return this.blockEditor.applyAction(new EditorState(document, []), action);
   }
 
   applyRangeAction(document: StandardDocument, action: BlockEditorAction, staticRange?: StaticRange): EditorState {
-    let range = staticRange;
+    const fullRange = this.selectionToEditorRange(document, staticRange);
+    return this.blockEditor.applyAction(new EditorState(document, fullRange), action);
+  }
+
+  selectionToEditorRange(document: StandardDocument, selection?: StaticRange): EditorRange {
+    let range = selection;
 
     if (!range) {
       const selection = window.getSelection();
@@ -65,7 +70,7 @@ export class HTMLBlockEditor {
       fullRange = this.blockEditor.expandRange(document, shallowRange);
     }
 
-    return this.blockEditor.applyAction(new EditorState(document, fullRange), action);
+    return fullRange;
   }
 
   updateWindowSelection(range: EditorRange) {
