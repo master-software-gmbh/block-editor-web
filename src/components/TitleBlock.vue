@@ -25,6 +25,7 @@ export default defineComponent({
 <style lang="css" scoped>
 [data-element="title"] {
   min-height: 1em;
+  line-height: 1em;
   margin: 0.25em 0 0.5rem;
 }
 </style>

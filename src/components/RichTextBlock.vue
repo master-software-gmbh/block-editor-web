@@ -33,8 +33,9 @@ export default defineComponent({
 
 <style lang="css">
 [data-block-type="rich-text"] {
-  margin: 0.5rem 0;
   min-height: 1em;
+  line-height: 1em;
+  margin: 0.5rem 0;
 
   .bold {
     font-weight: bold;

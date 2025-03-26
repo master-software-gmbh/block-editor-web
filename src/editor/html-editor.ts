@@ -154,11 +154,7 @@ export class HTMLBlockEditor {
       }
     }
 
-    if (!startElement || !endElement) {
-      return [];
-    }
-
-    if (startElement.type === 'block') {
+    if (startElement?.type === 'block') {
       return [
         {
           type: 'rich_text',
@@ -170,7 +166,7 @@ export class HTMLBlockEditor {
       ];
     }
 
-    if (startElement.type !== 'span' || endElement.type !== 'span') {
+    if (startElement?.type !== 'span' || endElement?.type !== 'span') {
       return [
         {
           type: 'title',
@@ -178,6 +174,10 @@ export class HTMLBlockEditor {
           endOffset: range.endOffset,
         },
       ];
+    }
+
+    if (!startElement || !endElement) {
+      return [];
     }
 
     if (startElement.blockId === endElement.blockId && startElement.index === endElement.index) {

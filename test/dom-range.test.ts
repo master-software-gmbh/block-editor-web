@@ -51,16 +51,43 @@ const default1 = `
 </div>
 `;
 
+const default2 = `
+<div data-element="editor" contenteditable="">
+  <h1 data-element="title" data-placeholder="Titel"></h1>
+  <div contenteditable="false"></div>
+  <div data-element="insertion-target" contenteditable="false">
+    <div></div>
+  </div>
+  <div class="block-wrapper">
+    <div data-element="block" data-block-id="fc754f08-da7f-4590-9d4d-30836db832b6"
+      data-block-type="rich-text">
+      <span data-element="span" data-span-index="0">The </span>
+      <span class="bold" data-element="span" data-span-index="1">quick brown</span>
+      <span data-element="span" data-span-index="2"> fox</span>
+    </div>
+    <div class="dragger" contenteditable="false" draggable="true"></div>
+  </div>
+  <div data-element="insertion-target" contenteditable="false">
+    <div></div>
+  </div>
+  <div contenteditable="false"></div>
+</div>
+`;
+
+const getTextChild = (element?: Element | null) => {
+  if (!element || !(element.firstChild instanceof Text)) {
+    throw new Error(`First child of element is not a Text node: ${element}`);
+  }
+
+  return element.firstChild;
+};
+
 const getSpanContainer = (blockId: string, spanIndex: number) => {
   const spanContainer = document
     .querySelector(`[data-block-id="${blockId}"]`)
     ?.querySelector(`[data-span-index="${spanIndex}"]`);
 
-  if (!spanContainer || !(spanContainer.firstChild instanceof Text)) {
-    throw new Error(`Span container not found for blockId: ${blockId}, spanIndex: ${spanIndex}`);
-  }
-
-  return spanContainer.firstChild;
+  return getTextChild(spanContainer);
 };
 
 describe('getEditorRange', () => {
@@ -233,6 +260,90 @@ describe('getEditorRange', () => {
         type: 'rich_text',
         blockId: 'a920289b-88a5-47d8-8771-a77b69b6dd40',
         spanIndex: 0,
+        startOffset: 0,
+        endOffset: 0,
+      },
+    ]);
+  });
+
+  it('should work at the end of the title', () => {
+    document.body.innerHTML = default1;
+
+    const startContainer = getTextChild(document.querySelector('[data-element="title"]'));
+    const endContainer = startContainer;
+
+    const domRange = new Range();
+    domRange.setStart(startContainer, 22);
+    domRange.setEnd(endContainer, 22);
+
+    const result: EditorRange = editor.getShallowEditorRange(domRange);
+
+    expect(result).toEqual([
+      {
+        type: 'title',
+        startOffset: 22,
+        endOffset: 22,
+      },
+    ]);
+  });
+
+  it('should work at the start of the title', () => {
+    document.body.innerHTML = default1;
+
+    const startContainer = getTextChild(document.querySelector('[data-element="title"]'));
+    const endContainer = startContainer;
+
+    const domRange = new Range();
+    domRange.setStart(startContainer, 0);
+    domRange.setEnd(endContainer, 0);
+
+    const result: EditorRange = editor.getShallowEditorRange(domRange);
+
+    expect(result).toEqual([
+      {
+        type: 'title',
+        startOffset: 0,
+        endOffset: 0,
+      },
+    ]);
+  });
+
+  it('should work with a title selection', () => {
+    document.body.innerHTML = default1;
+
+    const startContainer = getTextChild(document.querySelector('[data-element="title"]'));
+    const endContainer = startContainer;
+
+    const domRange = new Range();
+    domRange.setStart(startContainer, 12);
+    domRange.setEnd(endContainer, 22);
+
+    const result: EditorRange = editor.getShallowEditorRange(domRange);
+
+    expect(result).toEqual([
+      {
+        type: 'title',
+        startOffset: 12,
+        endOffset: 22,
+      },
+    ]);
+  });
+
+  it('should work with an empty title', () => {
+    document.body.innerHTML = default2;
+
+    const startContainer = document.querySelector('[data-element="title"]')!;
+    const endContainer = startContainer;
+
+    const domRange = new Range();
+    domRange.setStart(startContainer, 0);
+    domRange.setEnd(endContainer, 0);
+
+    const result: EditorRange = editor.getShallowEditorRange(domRange);
+
+    expect(result).toEqual([
+      {
+        type: 'title',
         startOffset: 0,
         endOffset: 0,
       },
