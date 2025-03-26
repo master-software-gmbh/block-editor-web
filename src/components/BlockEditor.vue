@@ -298,6 +298,8 @@ export default defineComponent({
     },
     handleSave() {
       this.$root?.$data.onSave(this.document);
+      this.dirty = false;
+      this.$root?.$data.onExit();
     },
     handleAddImage(event: Event) {
       if (event.target instanceof HTMLInputElement && event.target.files) {
