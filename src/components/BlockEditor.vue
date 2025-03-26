@@ -304,8 +304,8 @@ export default defineComponent({
     handleSelectAll() {
       logger.debug('Select All pressed');
     },
-    handleSave() {
-      this.$root?.$data.onSave(this.document);
+    async handleSave() {
+      await this.$root?.$data.onSave(this.document);
       this.dirty = false;
       this.$root?.$data.onExit();
     },
