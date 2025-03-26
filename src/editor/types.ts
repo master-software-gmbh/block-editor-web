@@ -29,7 +29,15 @@ export interface RichTextRange {
   endOffset?: number;
 }
 
-export type EditorRange = (TitleRange | RichTextRange)[];
+interface PlainTextRange {
+  type: 'plain_text';
+  blockId: string;
+  property: string;
+  startOffset: number;
+  endOffset?: number;
+}
+
+export type EditorRange = (TitleRange | RichTextRange | PlainTextRange)[];
 
 export type BlockEditorAction =
   | {

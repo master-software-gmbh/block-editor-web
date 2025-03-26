@@ -17,7 +17,13 @@ export type Span = {
   blockId: string;
 };
 
-export type EditorElement = Block | Span | Title;
+type PlainText = {
+  type: 'plain';
+  blockId: string;
+  property: string;
+};
+
+export type EditorElement = Block | Span | Title | PlainText;
 
 export type EditorRangeAction = {
   rangeStart?: number;
@@ -89,31 +95,53 @@ export class HTMLBlockEditor {
     const firstElement = range.at(0);
     const lastElement = range.at(-1);
 
-    if (firstElement?.type !== 'rich_text' || lastElement?.type !== 'rich_text') {
+    if (!firstElement || !lastElement) {
+      return selection;
+    }
+
+    if (firstElement.type === 'title' && lastElement.type === 'title') {
       const title = document.querySelector('[data-element="title"]');
 
       if (title) {
         const child = this.findTextChild(title);
 
         if (child) {
-          selection.setStart(child, firstElement?.startOffset ?? 0);
-          selection.setEnd(child, lastElement?.endOffset ?? 0);
+          selection.setStart(child, firstElement.startOffset);
+          selection.setEnd(child, lastElement.endOffset ?? 0);
         }
       }
 
       return selection;
     }
 
-    const textStart = this.findSpanTextNode(firstElement.blockId, firstElement.spanIndex);
+    if (firstElement.type === 'plain_text' && lastElement.type === 'plain_text') {
+      const block = document.querySelector(`[data-block-id="${firstElement.blockId}"]`);
+      const property = block?.querySelector(`[data-editing-property="${firstElement.property}"]`);
 
-    if (textStart) {
-      selection.setStart(textStart, firstElement.startOffset);
+      if (property) {
+        const child = this.findTextChild(property);
+
+        if (child) {
+          selection.setStart(child, firstElement.startOffset);
+          selection.setEnd(child, lastElement.endOffset ?? firstElement.startOffset);
+        }
+      }
+
+      return selection;
     }
 
-    const textEnd = this.findSpanTextNode(lastElement.blockId, lastElement.spanIndex);
+    if (firstElement.type === 'rich_text' && lastElement.type === 'rich_text') {
+      const textStart = this.findSpanTextNode(firstElement.blockId, firstElement.spanIndex);
 
-    if (textEnd) {
-      selection.setEnd(textEnd, lastElement.endOffset ?? lastElement.startOffset);
+      if (textStart) {
+        selection.setStart(textStart, firstElement.startOffset);
+      }
+
+      const textEnd = this.findSpanTextNode(lastElement.blockId, lastElement.spanIndex);
+
+      if (textEnd) {
+        selection.setEnd(textEnd, lastElement.endOffset ?? lastElement.startOffset);
+      }
     }
 
     return selection;
@@ -127,7 +155,7 @@ export class HTMLBlockEditor {
     let startEndOffset: number | undefined;
 
     if (range.startContainer instanceof Text) {
-      startElement = this.getElementAtTextNode(range.startContainer);
+      startElement = this.getElementAtNode(range.startContainer);
       startOffset = range.startOffset;
     } else if (range.startContainer instanceof Element) {
       if (range.startOffset > range.startContainer.children.length) {
@@ -145,7 +173,7 @@ export class HTMLBlockEditor {
     }
 
     if (range.endContainer instanceof Text) {
-      endElement = this.getElementAtTextNode(range.endContainer);
+      endElement = this.getElementAtNode(range.endContainer);
     } else if (range.endContainer instanceof Element) {
       if (range.endOffset === 0) {
         endElement = this.getFirstChildElement(range.endContainer);
@@ -165,6 +193,18 @@ export class HTMLBlockEditor {
           type: 'rich_text',
           blockId: startElement.blockId,
           spanIndex: 0,
+          startOffset: startOffset,
+          endOffset: range.endOffset,
+        },
+      ];
+    }
+
+    if (startElement?.type === 'plain') {
+      return [
+        {
+          type: 'plain_text',
+          blockId: startElement.blockId,
+          property: startElement.property,
           startOffset: startOffset,
           endOffset: range.endOffset,
         },
@@ -292,36 +332,6 @@ export class HTMLBlockEditor {
     return textNode.textContent;
   }
 
-  getElementAtTextNode(node: Text): EditorElement | null {
-    const spanIndex = this.findAttribute(node, 'data-span-index');
-    const blockId = this.findAttribute(node, 'data-block-id');
-
-    if (spanIndex && blockId) {
-      return {
-        blockId,
-        type: 'span',
-        index: Number.parseInt(spanIndex),
-      };
-    }
-
-    if (blockId) {
-      return {
-        type: 'block',
-        blockId: blockId,
-      };
-    }
-
-    const element = this.findAttribute(node, 'data-element');
-
-    if (element === 'title') {
-      return {
-        type: 'title',
-      };
-    }
-
-    return null;
-  }
-
   private getFirstChildElement(node: Element): EditorElement | null {
     for (let i = 0; i < node.childNodes.length; i++) {
       const child = node.childNodes[i];
@@ -370,8 +380,10 @@ export class HTMLBlockEditor {
     return false;
   }
 
-  private getElementAtNode(node: Element): EditorElement | null {
+  private getElementAtNode(node: Node): EditorElement | null {
     const spanIndex = this.findAttribute(node, 'data-span-index');
+    const editingType = this.findAttribute(node, 'data-editing-type');
+    const editingProperty = this.findAttribute(node, 'data-editing-property');
     const blockId = this.findAttribute(node, 'data-block-id');
 
     if (spanIndex && blockId) {
@@ -379,6 +391,14 @@ export class HTMLBlockEditor {
         blockId,
         type: 'span',
         index: Number.parseInt(spanIndex),
+      };
+    }
+
+    if (editingType === 'plain' && editingProperty && blockId) {
+      return {
+        type: 'plain',
+        blockId: blockId,
+        property: editingProperty,
       };
     }
 

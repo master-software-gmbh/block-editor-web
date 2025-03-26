@@ -3,7 +3,7 @@
     <template v-if="!file || file?.state === 'uploaded'">
       <AudioPlayer v-if="block.content.type.startsWith('audio')" :source="sourceUrl" :type="block.content.type">
         <div class="row">
-          <div data-placeholder="Titel" contenteditable="true">
+          <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" contenteditable="true">
             {{ block.content.name }}
           </div>
           <button type="button" @click="$emit('remove', block.id)" data-display="plain"
@@ -12,7 +12,7 @@
       </AudioPlayer>
       <ImagePreview v-else-if="block.content.type.startsWith('image')" :source="sourceUrl" :type="block.content.type">
         <div class="column">
-          <div data-placeholder="Titel" contenteditable="true">
+          <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" contenteditable="true">
             {{ block.content.name }}
           </div>
           <button type="button" @click="$emit('remove', block.id)" data-display="plain"

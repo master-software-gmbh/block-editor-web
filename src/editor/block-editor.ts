@@ -269,13 +269,25 @@ export class BlockEditor {
 
     const firstElement = state.selection.at(0);
 
-    if (firstElement && firstElement.type === 'rich_text') {
+    if (firstElement?.type === 'rich_text') {
       newSelection = [
         {
           type: 'rich_text',
           blockId: firstElement.blockId,
           spanIndex: firstElement.spanIndex,
           startOffset: firstElement.startOffset + text.length,
+        },
+      ];
+    } else if (firstElement?.type === 'plain_text') {
+      const cleanText = text.replace(/\n/g, '');
+
+      newSelection = [
+        {
+          type: 'plain_text',
+          blockId: firstElement.blockId,
+          property: firstElement.property,
+          startOffset: firstElement.startOffset + cleanText.length,
+          endOffset: firstElement.startOffset + cleanText.length,
         },
       ];
     }
@@ -291,20 +303,18 @@ export class BlockEditor {
     let currentBlock: RichTextBlock | undefined;
 
     for (const range of state.selection) {
-      if (range.type !== 'rich_text') {
-        if (range.type === 'title') {
-          const cleanText = text.replace(/\n/g, '');
-          state.document.title =
-            state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
+      if (range.type === 'title') {
+        const cleanText = text.replace(/\n/g, '');
+        state.document.title =
+          state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
 
-          newSelection = [
-            {
-              type: 'title',
-              startOffset: range.startOffset + cleanText.length,
-              endOffset: range.startOffset + cleanText.length,
-            },
-          ];
-        }
+        newSelection = [
+          {
+            type: 'title',
+            startOffset: range.startOffset + cleanText.length,
+            endOffset: range.startOffset + cleanText.length,
+          },
+        ];
       }
     }
 
@@ -381,6 +391,17 @@ export class BlockEditor {
             // Clear the remaining text so the remaining selected spans are just replaced with nothing
             remainingText = '';
           }
+        }
+      } else {
+        const selectionRange = state.selection.find(
+          (range) => range.type === 'plain_text' && range.blockId === currentBlock?.id,
+        );
+
+        if (selectionRange?.type === 'plain_text' && selectionRange.property in currentBlock.content) {
+          const content = currentBlock.content[selectionRange.property];
+          const cleanText = remainingText.replace(/\n/g, '');
+          currentBlock.content[selectionRange.property] =
+            content.slice(0, selectionRange.startOffset) + cleanText + content.slice(selectionRange.endOffset);
         }
       }
 
