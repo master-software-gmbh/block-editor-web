@@ -43,6 +43,8 @@ export class BlockEditor {
       }
       case 'move_block':
         return this.moveBlock(state, action.id, action.index);
+      case 'remove_block':
+        return this.removeBlock(state, action.id);
       case 'insert_paragraph':
         return this.replaceText(state, '\n');
       default:
@@ -86,6 +88,16 @@ export class BlockEditor {
         state.document.blocks.splice(fromIndex, 1);
         state.document.blocks.splice(index, 0, blockToMove);
       }
+    }
+
+    return state;
+  }
+
+  private removeBlock(state: EditorState, id: string): EditorState {
+    const index = state.document.blocks.findIndex((block) => block.id === id);
+
+    if (index > -1) {
+      state.document.blocks.splice(index, 1);
     }
 
     return state;

@@ -13,7 +13,8 @@
       <BlockWrapper :block-id="block.id">
         <RichTextBlock v-if="block.type === 'rich-text'" :block="block" />
         <HeadingBlock v-else-if="block.type === 'heading'" :block="block" />
-        <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]" />
+        <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]"
+          @remove="handleRemoveBlock" />
         <UnknownBlock v-else="block.type" :block="block" />
       </BlockWrapper>
     </template>
@@ -256,6 +257,13 @@ export default defineComponent({
         id: blockId,
         index: toIndex,
         type: 'move_block',
+      });
+      this.updateEditorState(newState);
+    },
+    handleRemoveBlock(blockId: string) {
+      const newState = htmlEditor.applyAction(this.document, {
+        id: blockId,
+        type: 'remove_block',
       });
       this.updateEditorState(newState);
     },

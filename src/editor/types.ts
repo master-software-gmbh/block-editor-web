@@ -54,5 +54,9 @@ export type BlockEditorAction =
       index: number;
     }
   | {
+      type: 'remove_block';
+      id: string;
+    }
+  | {
       type: 'insert_paragraph';
     };
