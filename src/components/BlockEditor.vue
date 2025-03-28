@@ -83,16 +83,14 @@ export default defineComponent({
     const status = ref<EditorStatus>('idle');
 
     const autoSave = debounce(async () => {
-      if (dirty.value) {
-        status.value = 'saving';
+      status.value = 'saving';
 
-        await withConstantTime(async () => {
-          await onSave(documentRef.value);
-        }, 1000);
+      await withConstantTime(async () => {
+        await onSave(documentRef.value);
+      }, 1000);
 
-        dirty.value = false;
-        status.value = 'saved';
-      }
+      dirty.value = false;
+      status.value = 'saved';
     }, 1500);
 
     return {

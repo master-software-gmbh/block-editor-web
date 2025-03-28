@@ -47,6 +47,16 @@ const default1 = `
   <div data-element="insertion-target" contenteditable="false">
     <div></div>
   </div>
+  <div class="block-wrapper">
+    <div data-element="block"
+      data-block-id="a9033791-ed99-4d4b-b4a0-2aee6802a11c" data-block-type="rich-text">
+      <span data-element="span" data-span-index="0">Hello World</span>
+    </div>
+    <div class="dragger" contenteditable="false" draggable="true"></div>
+  </div>
+  <div data-element="insertion-target" contenteditable="false">
+    <div></div>
+  </div>
   <div contenteditable="false"></div>
 </div>
 `;
@@ -231,6 +241,30 @@ describe('getEditorRange', () => {
         spanIndex: 1,
         startOffset: 0,
         endOffset: 4,
+      },
+    ]);
+  });
+
+  it('should work with a selection of a whole block (double-click, single span, whitespace)', () => {
+    document.body.innerHTML = default1;
+
+    const startContainer = getSpanContainer('a9033791-ed99-4d4b-b4a0-2aee6802a11c', 0);
+    const endContainer = document.querySelector('[data-block-id="a9033791-ed99-4d4b-b4a0-2aee6802a11c"]')
+      ?.parentElement!;
+
+    const domRange = new Range();
+    domRange.setStart(startContainer, 0);
+    domRange.setEnd(endContainer, 3);
+
+    const result: EditorRange = editor.getShallowEditorRange(domRange);
+
+    expect(result).toEqual([
+      {
+        type: 'rich_text',
+        blockId: 'a9033791-ed99-4d4b-b4a0-2aee6802a11c',
+        spanIndex: 0,
+        startOffset: 0,
+        endOffset: 11,
       },
     ]);
   });

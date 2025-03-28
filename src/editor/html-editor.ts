@@ -232,7 +232,7 @@ export class HTMLBlockEditor {
           blockId: startElement.blockId,
           spanIndex: startElement.index,
           startOffset: startOffset,
-          endOffset: range.endOffset,
+          endOffset: endOffset ?? range.endOffset,
         },
       ];
     }
