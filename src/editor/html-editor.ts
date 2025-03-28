@@ -216,7 +216,7 @@ export class HTMLBlockEditor {
         {
           type: 'title',
           startOffset: range.startOffset,
-          endOffset: range.endOffset,
+          endOffset: Math.max(range.startOffset, range.endOffset), // Prevent startOffset from being larger than endOffset
         },
       ];
     }
