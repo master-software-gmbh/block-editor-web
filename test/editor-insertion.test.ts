@@ -1056,9 +1056,7 @@ describe('BlockEditor', () => {
               spans: [
                 {
                   text: '',
-                  attributes: {
-                    bold: true,
-                  },
+                  attributes: {},
                 },
               ],
             },

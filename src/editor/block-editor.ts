@@ -463,18 +463,12 @@ export class BlockEditor {
 
   private optimizeRichTextBlock(block: RichTextBlock, newSelection: EditorRange): RichTextBlock {
     const optimizedSpans: Span[] = [];
-    let firstRemovedSpan: Span | undefined;
 
     for (const [index, span] of block.content.spans.entries()) {
       const previousSpan = optimizedSpans.at(optimizedSpans.length - 1);
 
       // Filter out empty spans
       if (span.text.length === 0) {
-        if (!firstRemovedSpan) {
-          // Preserve first removed span
-          firstRemovedSpan = span;
-        }
-
         const startSelection = newSelection.at(0);
 
         if (
@@ -505,9 +499,12 @@ export class BlockEditor {
       optimizedSpans.push(span);
     }
 
-    if (optimizedSpans.length === 0 && firstRemovedSpan) {
+    if (optimizedSpans.length === 0) {
       // Add one empty span back to preserve editing capability
-      optimizedSpans.push(firstRemovedSpan);
+      optimizedSpans.push({
+        text: '',
+        attributes: {},
+      });
     }
 
     return compose(RichTextContent, RichTextSpans).set(block, optimizedSpans);
