@@ -26,11 +26,35 @@ export default defineComponent({
       this.dragging = false;
     },
     handleDrop(event: DragEvent) {
+      event.preventDefault();
       this.dragging = false;
-      const blockId = event.dataTransfer?.getData(DataTransferPayload.BlockId);
+
+      if (!event.dataTransfer) {
+        return;
+      }
+
+      const blockId = event.dataTransfer.getData(DataTransferPayload.BlockId);
 
       if (blockId?.length) {
         this.$emit('move', blockId);
+      }
+
+      // Handle file drop
+
+      if (event.dataTransfer.items) {
+        [...event.dataTransfer.items].forEach((item, i) => {
+          if (item.kind === "file") {
+            const file = item.getAsFile();
+
+            if (file) {
+              this.$emit('file', file);
+            }
+          }
+        });
+      } else {
+        [...event.dataTransfer.files].forEach((file, i) => {
+          this.$emit('file', file);
+        });
       }
     },
   },

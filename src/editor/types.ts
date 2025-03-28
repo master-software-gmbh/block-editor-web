@@ -1,5 +1,7 @@
 import type { RichTextAttributeType, StandardDocument } from 'bun-utilities/cms';
 
+export type EditorStatus = 'idle' | 'saving' | 'saved' | 'error';
+
 export class EditorState {
   readonly document: StandardDocument;
   readonly selection: EditorRange;

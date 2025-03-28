@@ -1,8 +1,7 @@
 <template>
-  <div data-element="block" :autofocus="autofocus" :data-block-id="block.id" :data-block-type="block.type"
-    :data-placeholder="placeholder">
+  <div data-element="block" :autofocus="autofocus" :data-block-id="block.id" :data-block-type="block.type">
     <span v-for="(span, index) in block.content.spans" :class="span.attributes" data-element="span"
-      :data-span-index="index" data-editing-mode="rich">
+      :data-span-index="index" data-editing-mode="rich" :data-placeholder="index === 0 ? placeholder : undefined">
       {{ span.text }}
     </span>
   </div>
@@ -33,8 +32,7 @@ export default defineComponent({
 
 <style lang="css">
 [data-block-type="rich-text"] {
-  min-height: 1em;
-  line-height: 1em;
+  min-height: 1.4em;
   margin: 0.5rem 0;
 
   .bold {

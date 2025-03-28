@@ -9,8 +9,8 @@
 [data-element="block"],
 [data-element="title"],
 [contenteditable="true"] {
-  outline: none;
   width: 100%;
+  outline: none;
   white-space: pre-wrap;
 }
 
@@ -18,12 +18,13 @@
   position: relative;
 
   &:empty::after {
-    content: attr(data-placeholder);
-    position: absolute;
-    opacity: 0.3;
-    cursor: text;
     top: 0;
     left: 0;
+    opacity: 0.3;
+    cursor: text;
+    width: 250px;
+    position: absolute;
+    content: attr(data-placeholder);
   }
 }
 
