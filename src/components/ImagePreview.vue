@@ -24,6 +24,7 @@ export default defineComponent({
 
 <style lang="css" scoped>
 .image-preview {
+  width: 100%;
   display: flex;
   align-items: center;
   column-gap: 1rem;

@@ -3,9 +3,8 @@
     <TitleBlock :title="document.title" />
 
     <div contenteditable="false">
-      <slot name="title" :onSave="handleSave" :onAddAudio="handleAddFile" :onAddImage="handleAddFile"
-        :onFormatBold="() => handleFormatBold()" :onFormatItalic="() => handleFormatItalic()"
-        :onFormatUnderline="() => handleFormatUnderline()"></slot>
+      <slot name="title" :onSave="handleSave" :onAddFile="handleAddFile" :onFormatBold="() => handleFormatBold()"
+        :onFormatItalic="() => handleFormatItalic()" :onFormatUnderline="() => handleFormatUnderline()"></slot>
     </div>
 
     <template v-for="(block, index) in document.blocks">
@@ -15,7 +14,7 @@
           :placeholder="index === 0 ? placeholder : undefined" />
         <HeadingBlock v-else-if="block.type === 'heading'" :block="block" />
         <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]"
-          @remove="handleRemoveBlock" />
+          :source="getFileSourceUrl(block.content.id)" @remove="handleRemoveBlock" />
         <UnknownBlock v-else="block.type" :block="block" />
       </BlockWrapper>
     </template>
@@ -70,8 +69,9 @@ export default defineComponent({
     const onSave = inject<(document: StandardDocument) => Promise<void>>('onSave');
     const onExit = inject<() => void>('onExit');
     const onUpload = inject<(data: File, documentId: string, fileId: string) => Promise<'uploaded' | 'error'>>('onUpload');
+    const getFileSourceUrl = inject<(fileId: string) => string>('getFileSourceUrl');
 
-    if (!onSave || !onExit || !onUpload) {
+    if (!onSave || !onExit || !onUpload || !getFileSourceUrl) {
       throw new Error('Missing dependencies');
     }
 
@@ -101,6 +101,7 @@ export default defineComponent({
       onUpload: onUpload,
       autoSave: autoSave,
       document: documentRef,
+      getFileSourceUrl: getFileSourceUrl,
       files: ref<Record<string, CmsFile>>({}),
     };
   },
@@ -408,7 +409,7 @@ export default defineComponent({
         documentId: this.document.id,
         content: {
           id: fileId,
-          name: file.name,
+          name: file.name.split('.').at(0) ?? file.name,
           type: file.type,
         },
       };

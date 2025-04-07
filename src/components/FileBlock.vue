@@ -1,7 +1,7 @@
 <template>
   <div data-element="block" :data-block-id="block.id" :data-block-type="block.type" contenteditable="false">
     <template v-if="!file || file?.state === 'uploaded'">
-      <AudioPlayer v-if="block.content.type.startsWith('audio')" :source="sourceUrl" :type="block.content.type">
+      <AudioPlayer v-if="block.content.type.startsWith('audio')" :source="source" :type="block.content.type">
         <div class="row">
           <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" contenteditable="true">
             {{ block.content.name }}
@@ -10,7 +10,7 @@
             data-variant="tertiary">Entfernen</button>
         </div>
       </AudioPlayer>
-      <ImagePreview v-else-if="block.content.type.startsWith('image')" :source="sourceUrl" :type="block.content.type">
+      <ImagePreview v-else-if="block.content.type.startsWith('image')" :source="source" :type="block.content.type">
         <div class="column">
           <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" contenteditable="true">
             {{ block.content.name }}
@@ -49,13 +49,12 @@ export default defineComponent({
       type: Object as PropType<CmsFile | undefined>,
       required: false,
     },
+    source: {
+      type: String,
+      required: true,
+    }
   },
   emits: ['remove'],
-  computed: {
-    sourceUrl() {
-      return `/api/v1/files/${this.block.content.id}`;
-    },
-  },
   components: {
     AudioPlayer,
     ImagePreview,
