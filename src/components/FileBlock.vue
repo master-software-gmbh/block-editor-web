@@ -3,19 +3,19 @@
     <template v-if="!file || file?.state === 'uploaded'">
       <AudioPlayer v-if="block.content.type.startsWith('audio')" :source="source" :type="block.content.type">
         <div class="row">
-          <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" contenteditable="true">
+          <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" :contenteditable="editable">
             {{ block.content.name }}
           </div>
-          <button type="button" @click="$emit('remove', block.id)" data-display="plain"
+          <button v-if="editable" type="button" @click="$emit('remove', block.id)" data-display="plain"
             data-variant="tertiary">Entfernen</button>
         </div>
       </AudioPlayer>
       <ImagePreview v-else-if="block.content.type.startsWith('image')" :source="source" :type="block.content.type">
         <div class="column">
-          <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" contenteditable="true">
+          <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" :contenteditable="editable">
             {{ block.content.name }}
           </div>
-          <button type="button" @click="$emit('remove', block.id)" data-display="plain"
+          <button v-if="editable" type="button" @click="$emit('remove', block.id)" data-display="plain"
             data-variant="tertiary">Entfernen</button>
         </div>
       </ImagePreview>
@@ -52,7 +52,11 @@ export default defineComponent({
     source: {
       type: String,
       required: true,
-    }
+    },
+    editable: {
+      type: Boolean,
+      default: true,
+    },
   },
   emits: ['remove'],
   components: {

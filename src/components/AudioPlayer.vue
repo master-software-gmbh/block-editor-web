@@ -12,12 +12,12 @@
     </svg>
     <div class="column">
       <div class="row">
-        <progress :value="currentTime" max="1"></progress>
+        <progress ref="progressElement" :value="progress" max="1" @click="progressBarClick"></progress>
         <span>{{ duration }}</span>
       </div>
       <slot></slot>
     </div>
-    <audio ref="audio" preload="metadata">
+    <audio ref="playerElement" preload="metadata">
       <source :src="source" :type="type" />
     </audio>
   </div>
@@ -39,14 +39,15 @@ export default defineComponent({
   },
   setup() {
     return {
-      player: ref<HTMLAudioElement | null>(null),
+      progress: ref(0),
       isPlaying: ref(false),
-      currentTime: ref(0),
       duration: ref('00:00'),
+      playerElement: ref<HTMLAudioElement | null>(null),
+      progressElement: ref<HTMLElement | null>(null),
     };
   },
   mounted() {
-    const player = this.$refs['audio'] as HTMLAudioElement;
+    const player = this.$refs['playerElement'] as HTMLAudioElement;
 
     player.addEventListener('playing', () => {
       this.isPlaying = true;
@@ -58,28 +59,39 @@ export default defineComponent({
 
     player.addEventListener('loadedmetadata', () => {
       if (player.duration !== Number.POSITIVE_INFINITY) {
-        const minutes = Math.floor(player.duration / 60);
-        const seconds = Math.floor(player.duration % 60);
-
-        const formattedMinutes = minutes.toString().padStart(2, '0');
-        const formattedSeconds = seconds.toString().padStart(2, '0');
-
-        this.duration = `${formattedMinutes}:${formattedSeconds}`;
+        this.setDuration(player.duration);
       }
     });
 
     player.addEventListener('timeupdate', () => {
-      this.currentTime = player.currentTime / player.duration;
+      this.progress = player.currentTime / player.duration;
+      this.setDuration(player.currentTime);
     });
 
-    this.player = player;
+    this.playerElement = player;
+    this.progressElement = this.$refs['progressElement'] as HTMLElement;
   },
   methods: {
+    setDuration(duration: number) {
+      const minutes = Math.floor(duration / 60);
+      const seconds = Math.floor(duration % 60);
+
+      const formattedMinutes = minutes.toString().padStart(2, '0');
+      const formattedSeconds = seconds.toString().padStart(2, '0');
+
+      this.duration = `${formattedMinutes}:${formattedSeconds}`;
+    },
+    progressBarClick(event: MouseEvent) {
+      if (this.progressElement && this.playerElement) {
+        const percent = event.offsetX / this.progressElement.offsetWidth;
+        this.playerElement.currentTime = percent * this.playerElement.duration;
+      }
+    },
     play() {
-      this.player?.play();
+      this.playerElement?.play();
     },
     pause() {
-      this.player?.pause();
+      this.playerElement?.pause();
     },
   },
 });

@@ -6,8 +6,13 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/lib.ts'),
       formats: ['es'],
+      fileName: (_, entryName) => `${entryName}.min.js`,
+      cssFileName: 'block-editor.min',
+      entry: {
+        'block-editor': resolve(__dirname, 'src/lib/editor.ts'),
+        'block-viewer': resolve(__dirname, 'src/lib/viewer.ts'),
+      },
     },
     rollupOptions: {
       external: ['vue'],
