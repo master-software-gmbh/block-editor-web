@@ -25,8 +25,21 @@ export class BlockEditor {
 
   applyAction(state: EditorState, action: BlockEditorAction): EditorState {
     switch (action.type) {
-      case 'insert_text':
-        return this.replaceText(state, action.text);
+      case 'insert_text': {
+        const paragraphs = action.text.split('\n\n');
+
+        let newState = state;
+
+        for (const [index, paragraph] of paragraphs.entries()) {
+          newState = this.replaceText(newState, paragraph);
+
+          if (index < paragraphs.length - 1) {
+            newState = this.replaceText(newState, '\n');
+          }
+        }
+
+        return newState;
+      }
       case 'delete_text':
         return this.replaceText(state, '');
       case 'set_attribute':

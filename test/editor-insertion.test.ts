@@ -1551,4 +1551,220 @@ describe('BlockEditor', () => {
 
     expect(newState).toEqual(expectedState);
   });
+
+  it('should insert text with a line break at the end of a rich text block', () => {
+    const blockId = crypto.randomUUID();
+    const blockId2 = crypto.randomUUID();
+
+    const state = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            createdAt: date,
+            updatedAt: date,
+            id: blockId,
+            documentId: documentId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'rich_text',
+          blockId: blockId,
+          spanIndex: 1,
+          startOffset: 6,
+        },
+      ],
+    );
+
+    const expectedState = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            createdAt: date,
+            updatedAt: date,
+            id: blockId,
+            documentId: documentId,
+            content: {
+              text: 'Hello worldHello\nworld',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' worldHello\nworld',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'rich_text',
+          blockId: blockId,
+          spanIndex: 1,
+          startOffset: 17,
+        },
+      ],
+    );
+
+    const action: BlockEditorAction = {
+      type: 'insert_text',
+      text: 'Hello\nworld',
+    };
+
+    const editor = new BlockEditor(
+      () => blockId2,
+      () => date,
+    );
+    const newState = editor.applyAction(state, action);
+
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should insert text with multiple line breaks at the end of a rich text block', () => {
+    const blockId = crypto.randomUUID();
+    const blockId2 = crypto.randomUUID();
+
+    const state = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            createdAt: date,
+            updatedAt: date,
+            id: blockId,
+            documentId: documentId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'rich_text',
+          blockId: blockId,
+          spanIndex: 1,
+          startOffset: 6,
+        },
+      ],
+    );
+
+    const expectedState = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            createdAt: date,
+            updatedAt: date,
+            id: blockId,
+            documentId: documentId,
+            content: {
+              text: 'Hello worldHello',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' worldHello',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            type: 'rich-text',
+            createdAt: date,
+            updatedAt: date,
+            id: blockId2,
+            documentId: documentId,
+            content: {
+              text: 'world',
+              spans: [
+                {
+                  text: 'world',
+                  attributes: {},
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'rich_text',
+          blockId: blockId2,
+          spanIndex: 0,
+          startOffset: 5,
+        },
+      ],
+    );
+
+    const action: BlockEditorAction = {
+      type: 'insert_text',
+      text: 'Hello\n\nworld',
+    };
+
+    const editor = new BlockEditor(
+      () => blockId2,
+      () => date,
+    );
+    const newState = editor.applyAction(state, action);
+
+    expect(newState).toEqual(expectedState);
+  });
 });
