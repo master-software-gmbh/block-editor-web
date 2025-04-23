@@ -18,8 +18,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'ello world',
@@ -52,8 +50,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -100,8 +96,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -134,8 +128,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello, world',
@@ -182,8 +174,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -216,8 +206,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -264,8 +252,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'ello world',
@@ -302,8 +288,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -350,8 +334,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -396,8 +378,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!!',
@@ -456,8 +436,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -496,8 +474,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!!',
@@ -550,8 +526,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -590,8 +564,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'HelloHello world!',
@@ -644,8 +616,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -690,8 +660,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello worldworld!',
@@ -750,8 +718,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -796,8 +762,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!!!!',
@@ -856,8 +820,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello Hello bold world world',
@@ -915,8 +877,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello b world',
@@ -964,8 +924,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -1004,8 +962,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -1025,8 +981,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: '',
@@ -1054,10 +1008,7 @@ describe('BlockEditor', () => {
       type: 'insert_paragraph',
     };
 
-    const editor = new BlockEditor(
-      () => blockId2,
-      () => date,
-    );
+    const editor = new BlockEditor(() => blockId2);
     const newState = editor.applyAction(state, action);
 
     expect(newState).toEqual(expectedState);
@@ -1076,8 +1027,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -1116,8 +1065,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello ',
@@ -1137,8 +1084,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'world',
@@ -1168,10 +1113,7 @@ describe('BlockEditor', () => {
       type: 'insert_paragraph',
     };
 
-    const editor = new BlockEditor(
-      () => blockId2,
-      () => date,
-    );
+    const editor = new BlockEditor(() => blockId2);
     const newState = editor.applyAction(state, action);
 
     expect(newState).toEqual(expectedState);
@@ -1191,8 +1133,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -1212,8 +1152,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId3,
             content: {
               text: 'Hello world',
@@ -1252,8 +1190,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: '',
@@ -1267,8 +1203,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'Hello world',
@@ -1288,8 +1222,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId3,
             content: {
               text: 'Hello world',
@@ -1323,10 +1255,7 @@ describe('BlockEditor', () => {
       type: 'insert_paragraph',
     };
 
-    const editor = new BlockEditor(
-      () => blockId2,
-      () => date,
-    );
+    const editor = new BlockEditor(() => blockId2);
     const newState = editor.applyAction(state, action);
 
     expect(newState).toEqual(expectedState);
@@ -1347,8 +1276,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'The quick brown fox',
@@ -1372,8 +1299,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId3,
             content: {
               text: 'jumps over the lazy',
@@ -1393,8 +1318,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId4,
             content: {
               text: 'dog.',
@@ -1435,8 +1358,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'The quick brown',
@@ -1456,8 +1377,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'the lazy',
@@ -1477,8 +1396,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId4,
             content: {
               text: 'dog.',
@@ -1506,10 +1423,7 @@ describe('BlockEditor', () => {
       type: 'insert_paragraph',
     };
 
-    const editor = new BlockEditor(
-      () => blockId2,
-      () => date,
-    );
+    const editor = new BlockEditor(() => blockId2);
     const newState = editor.applyAction(state, action);
 
     expect(newState).toEqual(expectedState);
@@ -1528,8 +1442,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -1568,8 +1480,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello worldHello\nworld',
@@ -1604,10 +1514,7 @@ describe('BlockEditor', () => {
       text: 'Hello\nworld',
     };
 
-    const editor = new BlockEditor(
-      () => blockId2,
-      () => date,
-    );
+    const editor = new BlockEditor(() => blockId2);
     const newState = editor.applyAction(state, action);
 
     expect(newState).toEqual(expectedState);
@@ -1626,8 +1533,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -1666,8 +1571,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello worldHello',
@@ -1687,8 +1590,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'world',
@@ -1717,10 +1618,7 @@ describe('BlockEditor', () => {
       text: 'Hello\n\nworld',
     };
 
-    const editor = new BlockEditor(
-      () => blockId2,
-      () => date,
-    );
+    const editor = new BlockEditor(() => blockId2);
     const newState = editor.applyAction(state, action);
 
     expect(newState).toEqual(expectedState);

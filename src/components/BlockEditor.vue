@@ -404,8 +404,6 @@ export default defineComponent({
       const newBlock: FileRefBlock = {
         id: crypto.randomUUID(),
         type: 'file-ref',
-        createdAt: new Date(),
-        updatedAt: new Date(),
         content: {
           id: fileId,
           name: file.name.split('.').at(0) ?? file.name,

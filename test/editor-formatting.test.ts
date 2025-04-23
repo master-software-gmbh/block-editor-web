@@ -19,8 +19,6 @@ describe('set_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -56,8 +54,6 @@ describe('set_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -107,8 +103,6 @@ describe('set_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -148,8 +142,6 @@ describe('set_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -203,8 +195,6 @@ describe('set_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -240,8 +230,6 @@ describe('set_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world!',
@@ -305,8 +293,6 @@ describe('get_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -349,8 +335,6 @@ describe('get_attribute', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',

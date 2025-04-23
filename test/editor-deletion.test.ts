@@ -18,8 +18,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -55,8 +53,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello worl',
@@ -104,8 +100,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -141,8 +135,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Helloworld',
@@ -190,8 +182,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -239,8 +229,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Helloworld',
@@ -288,8 +276,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -331,8 +317,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'lo world',
@@ -386,8 +370,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -435,8 +417,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: ' world',
@@ -484,8 +464,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -527,8 +505,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Heo world',
@@ -582,8 +558,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -625,8 +599,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello wod',
@@ -680,8 +652,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello world',
@@ -717,8 +687,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId,
             content: {
               text: 'Hello wod',
@@ -767,8 +735,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: 'Hello world',
@@ -784,8 +750,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'Hello world',
@@ -828,8 +792,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: 'Hello worllo world',
@@ -884,8 +846,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: 'Hello world',
@@ -901,8 +861,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'Hello world Hello world',
@@ -942,8 +900,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: 'Hello world',
@@ -959,8 +915,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'Hello worldHello world',
@@ -1013,8 +967,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: '',
@@ -1028,8 +980,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: '',
@@ -1070,8 +1020,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: '',
@@ -1118,8 +1066,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: 'Hello world',
@@ -1135,8 +1081,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'Hello world Hello world',
@@ -1176,8 +1120,6 @@ describe('BlockEditor', () => {
         blocks: [
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId1,
             content: {
               text: 'Hello world',
@@ -1193,8 +1135,6 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
-            createdAt: date,
-            updatedAt: date,
             id: blockId2,
             content: {
               text: 'Hello world',

@@ -16,11 +16,9 @@ type Span = RichTextBlock['content']['spans'][number];
 
 export class BlockEditor {
   private readonly uuidFactory: () => string;
-  private readonly dateFactory: () => Date;
 
-  constructor(uuidFactory?: () => string, dateFactory?: () => Date) {
+  constructor(uuidFactory?: () => string) {
     this.uuidFactory = uuidFactory ?? crypto.randomUUID.bind(crypto);
-    this.dateFactory = dateFactory ?? (() => new Date());
   }
 
   applyAction(state: EditorState, action: BlockEditorAction): EditorState {
@@ -244,12 +242,9 @@ export class BlockEditor {
 
   private createEmptyRichTextBlock(attributes: Record<string, RichTextAttributeType>): RichTextBlock {
     const newBlockId = this.uuidFactory();
-    const newDate = this.dateFactory();
 
     return {
       id: newBlockId,
-      createdAt: newDate,
-      updatedAt: newDate,
       type: 'rich-text',
       content: {
         text: '',
