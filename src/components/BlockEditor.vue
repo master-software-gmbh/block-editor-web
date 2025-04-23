@@ -406,7 +406,6 @@ export default defineComponent({
         type: 'file-ref',
         createdAt: new Date(),
         updatedAt: new Date(),
-        documentId: this.document.id,
         content: {
           id: fileId,
           name: file.name.split('.').at(0) ?? file.name,

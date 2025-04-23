@@ -22,7 +22,6 @@ describe('set_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -60,7 +59,6 @@ describe('set_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -112,7 +110,6 @@ describe('set_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -154,7 +151,6 @@ describe('set_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -210,7 +206,6 @@ describe('set_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -248,7 +243,6 @@ describe('set_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -314,7 +308,6 @@ describe('get_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -359,7 +352,6 @@ describe('get_attribute', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [

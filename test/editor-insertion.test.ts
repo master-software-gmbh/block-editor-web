@@ -21,7 +21,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'ello world',
               spans: [
@@ -56,7 +55,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -105,7 +103,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -140,7 +137,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello, world',
               spans: [
@@ -189,7 +185,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -224,7 +219,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -273,7 +267,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'ello world',
               spans: [
@@ -312,7 +305,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -361,7 +353,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -408,7 +399,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!!',
               spans: [
@@ -469,7 +459,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -510,7 +499,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!!',
               spans: [
@@ -565,7 +553,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -606,7 +593,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'HelloHello world!',
               spans: [
@@ -661,7 +647,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -708,7 +693,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello worldworld!',
               spans: [
@@ -769,7 +753,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!',
               spans: [
@@ -816,7 +799,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world!!!!',
               spans: [
@@ -877,7 +859,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello Hello bold world world',
               spans: [
@@ -937,7 +918,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello b world',
               spans: [
@@ -987,7 +967,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1028,7 +1007,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1050,7 +1028,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId2,
-            documentId: documentId,
             content: {
               text: '',
               spans: [
@@ -1102,7 +1079,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1143,7 +1119,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello ',
               spans: [
@@ -1165,7 +1140,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId2,
-            documentId: documentId,
             content: {
               text: 'world',
               spans: [
@@ -1220,7 +1194,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1242,7 +1215,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId3,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1283,7 +1255,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: '',
               spans: [
@@ -1299,7 +1270,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId2,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1321,7 +1291,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId3,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1381,7 +1350,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'The quick brown fox',
               spans: [
@@ -1407,7 +1375,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId3,
-            documentId: documentId,
             content: {
               text: 'jumps over the lazy',
               spans: [
@@ -1429,7 +1396,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId4,
-            documentId: documentId,
             content: {
               text: 'dog.',
               spans: [
@@ -1472,7 +1438,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'The quick brown',
               spans: [
@@ -1494,7 +1459,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId2,
-            documentId: documentId,
             content: {
               text: 'the lazy',
               spans: [
@@ -1516,7 +1480,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId4,
-            documentId: documentId,
             content: {
               text: 'dog.',
               spans: [
@@ -1568,7 +1531,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1609,7 +1571,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello worldHello\nworld',
               spans: [
@@ -1668,7 +1629,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello world',
               spans: [
@@ -1709,7 +1669,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId,
-            documentId: documentId,
             content: {
               text: 'Hello worldHello',
               spans: [
@@ -1731,7 +1690,6 @@ describe('BlockEditor', () => {
             createdAt: date,
             updatedAt: date,
             id: blockId2,
-            documentId: documentId,
             content: {
               text: 'world',
               spans: [

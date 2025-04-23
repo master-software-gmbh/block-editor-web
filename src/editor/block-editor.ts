@@ -242,10 +242,7 @@ export class BlockEditor {
     return newRange;
   }
 
-  private createEmptyRichTextBlock(
-    documentId: string,
-    attributes: Record<string, RichTextAttributeType>,
-  ): RichTextBlock {
+  private createEmptyRichTextBlock(attributes: Record<string, RichTextAttributeType>): RichTextBlock {
     const newBlockId = this.uuidFactory();
     const newDate = this.dateFactory();
 
@@ -254,7 +251,6 @@ export class BlockEditor {
       createdAt: newDate,
       updatedAt: newDate,
       type: 'rich-text',
-      documentId: documentId,
       content: {
         text: '',
         spans: [
@@ -374,7 +370,7 @@ export class BlockEditor {
               updatedBlocks.push(currentBlock);
 
               // Initialize a new empty rich text block
-              currentBlock = this.createEmptyRichTextBlock(state.document.id, span.attributes);
+              currentBlock = this.createEmptyRichTextBlock(span.attributes);
 
               // Override selection to be a cursor at the beginning of the new block
               newSelection = [
