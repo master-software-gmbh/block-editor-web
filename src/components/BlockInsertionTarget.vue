@@ -5,13 +5,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { DataTransferPayload } from '../types';
+import { defineComponent, ref, inject } from 'vue';
+import { DataTransferPayload, type EditorConfiguration } from '../types';
 
 export default defineComponent({
   setup() {
+    const config = inject<EditorConfiguration>('config');
+
     return {
       dragging: ref(false),
+      fileUpload: !!config?.features.fileUpload,
     };
   },
   methods: {
@@ -41,6 +44,10 @@ export default defineComponent({
 
       // Handle file drop
 
+      if (!this.fileUpload) {
+        return;
+      }
+
       if (event.dataTransfer.items) {
         [...event.dataTransfer.items].forEach((item, i) => {
           if (item.kind === "file") {
@@ -56,6 +63,7 @@ export default defineComponent({
           this.$emit('file', file);
         });
       }
+
     },
   },
 });

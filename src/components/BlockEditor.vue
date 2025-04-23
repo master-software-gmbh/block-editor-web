@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref } from 'vue';
-import type { CmsFile } from '../types';
+import type { EditorConfiguration, CmsFile } from '../types';
 import { Booleanish, KeyName } from '../utilities';
 import BlockInsertionTarget from './BlockInsertionTarget.vue';
 import FileBlock from './FileBlock.vue';
@@ -66,13 +66,18 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const onSave = inject<(document: StandardDocument) => Promise<void>>('onSave');
-    const onExit = inject<() => void>('onExit');
-    const onUpload = inject<(data: File, documentId: string, fileId: string) => Promise<'uploaded' | 'error'>>('onUpload');
-    const getFileSourceUrl = inject<(fileId: string) => string>('getFileSourceUrl');
+    const config = inject<EditorConfiguration>('config');
 
-    if (!onSave || !onExit || !onUpload || !getFileSourceUrl) {
+    if (!config) {
       throw new Error('Missing dependencies');
+    }
+
+    if (config.features.fileUpload && !config.callbacks.onUpload) {
+      throw new Error('Missing onUpload callback');
+    }
+
+    if (config.features.fileUpload && !config.callbacks.getFileSourceUrl) {
+      throw new Error('Missing getFileSourceUrl callback');
     }
 
     const document = JSON.parse(props.document);
@@ -86,7 +91,7 @@ export default defineComponent({
       status.value = 'saving';
 
       await withConstantTime(async () => {
-        await onSave(documentRef.value);
+        await config.callbacks.onSave(documentRef.value);
       }, 1000);
 
       dirty.value = false;
@@ -96,12 +101,12 @@ export default defineComponent({
     return {
       dirty: dirty,
       status: status,
-      onSave: onSave,
-      onExit: onExit,
-      onUpload: onUpload,
       autoSave: autoSave,
       document: documentRef,
-      getFileSourceUrl: getFileSourceUrl,
+      onSave: config.callbacks.onSave,
+      onExit: config.callbacks.onExit,
+      onUpload: config.callbacks.onUpload,
+      getFileSourceUrl: config.callbacks.getFileSourceUrl,
       files: ref<Record<string, CmsFile>>({}),
     };
   },

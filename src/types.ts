@@ -1,3 +1,5 @@
+import type { StandardDocument } from 'bun-utilities/cms';
+
 const DataTransferNamespace = 'de.master-software.cms';
 
 export const DataTransferPayload = {
@@ -8,4 +10,16 @@ export interface CmsFile {
   source: File;
   type: 'audio' | 'image';
   state: 'pending' | 'uploaded' | 'error';
+}
+
+export interface EditorConfiguration {
+  features: {
+    fileUpload: boolean;
+  };
+  callbacks: {
+    onSave: (document: StandardDocument) => Promise<void>;
+    onExit: () => void;
+    onUpload?: (data: File, documentId: string, fileId: string) => Promise<'uploaded' | 'error'>;
+    getFileSourceUrl?: (fileId: string) => string;
+  };
 }
