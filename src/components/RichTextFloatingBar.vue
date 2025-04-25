@@ -16,7 +16,7 @@ export default defineComponent({
 
 <style lang="css" scoped>
 div {
-  z-index: 1;
+  z-index: 2;
   padding: 4px;
   display: none;
   column-gap: 5px;

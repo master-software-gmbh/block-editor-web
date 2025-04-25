@@ -1,40 +1,64 @@
 <template>
-  <div class="image-preview" contenteditable="false">
-    <img :src="source" />
-    <slot></slot>
-  </div>
+  <Transition name="fade">
+    <div v-if="preview" @click="setPreview(null)">
+      <img :src="preview" />
+    </div>
+  </Transition>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useImagePreview } from '../composables/useImagePreview';
 
 export default defineComponent({
-  props: {
-    source: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-    },
-  },
-})
+  setup() {
+    const { preview, setPreview } = useImagePreview();
+
+    return {
+      preview,
+      setPreview,
+    }
+  }
+});
 </script>
 
 <style lang="css" scoped>
-.image-preview {
+div {
+  top: 0;
+  left: 0;
+  z-index: 2;
   width: 100%;
+  height: 100%;
   display: flex;
+  position: fixed;
   align-items: center;
-  column-gap: 1rem;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+img {
+  width: auto;
+  height: auto;
+  max-width: 80%;
+  max-height: 80%;
+}
+
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 150ms ease-out;
 
   img {
-    width: 75px;
-    height: 75px;
-    flex-shrink: 0;
-    object-fit: cover;
-    border-radius: var(--internal-block-editor-border-radius);
+    transition: transform 150ms ease-out;
+  }
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+
+  img {
+    transform: scale(0.95);
   }
 }
 </style>

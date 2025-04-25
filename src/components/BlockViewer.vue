@@ -2,10 +2,6 @@
   <div data-element="editor">
     <TitleBlock :title="document.title" />
 
-    <div>
-      <slot name="title"></slot>
-    </div>
-
     <div class="blocks">
       <template v-for="block in document.blocks">
         <RichTextBlock v-if="block.type === 'rich-text'" :block="block" />
@@ -18,6 +14,8 @@
     <div>
       <slot name="bottom"></slot>
     </div>
+
+    <ImagePreview />
   </div>
 </template>
 
@@ -28,6 +26,7 @@ import HeadingBlock from './HeadingBlock.vue';
 import RichTextBlock from './RichTextBlock.vue';
 import TitleBlock from './TitleBlock.vue';
 import BlockWrapper from './BlockWrapper.vue';
+import ImagePreview from './ImagePreview.vue';
 
 export default defineComponent({
   props: {
@@ -56,6 +55,7 @@ export default defineComponent({
     TitleBlock,
     HeadingBlock,
     BlockWrapper,
+    ImagePreview,
     RichTextBlock,
   },
 });
@@ -65,6 +65,7 @@ export default defineComponent({
 .blocks {
   display: flex;
   row-gap: 0.5em;
+  margin-top: 6px;
   flex-direction: column;
 }
 </style>

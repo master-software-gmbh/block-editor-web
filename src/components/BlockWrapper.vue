@@ -55,8 +55,8 @@ export default defineComponent({
 }
 
 .block-wrapper {
+  z-index: 2;
   position: relative;
-  z-index: 1;
 
   &.dragging .dragger {
     cursor: grabbing;

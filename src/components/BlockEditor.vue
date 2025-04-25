@@ -1,12 +1,14 @@
 <template>
   <div data-element="editor" contenteditable="true" @beforeinput="handleBeforeInput" @keydown="handleKeydown">
-    <TitleBlock :title="document.title" />
 
     <div contenteditable="false">
       <slot name="title" :onSave="handleSave" :onAddFile="handleAddFile" :onFormatBold="() => handleFormatBold()"
         :onFormatItalic="() => handleFormatItalic()" :onFormatUnderline="() => handleFormatUnderline()"></slot>
     </div>
 
+    <hr />
+
+    <TitleBlock :title="document.title" />
     <template v-for="(block, index) in document.blocks">
       <BlockInsertionTarget @move="(id) => handleMove(id, index)" @file="(file) => handleFileDrop(file, index)" />
       <BlockWrapper :block-id="block.id">
@@ -18,17 +20,22 @@
         <UnknownBlock v-else="block.type" :block="block" />
       </BlockWrapper>
     </template>
-
     <BlockInsertionTarget @move="(id) => handleMove(id, document.blocks.length)"
       @file="(file) => handleFileDrop(file, document.blocks.length)" />
 
-    <div contenteditable="false">
-      <slot name="bottom" :onSave="handleSave"></slot>
+    <hr style="margin-top: 5em" />
+
+    <div class="bottom" contenteditable="false">
       <StatusBar :document="document" :status="status" />
+      <slot name="bottom" :onSave="handleSave"></slot>
     </div>
 
-    <RichTextFloatingBar @formatBold="handleFormatBold" @formatItalic="handleFormatItalic"
-      @formatUnderline="handleFormatUnderline" />
+
+    <div contenteditable="false">
+      <RichTextFloatingBar @formatBold="handleFormatBold" @formatItalic="handleFormatItalic"
+        @formatUnderline="handleFormatUnderline" />
+      <ImagePreview />
+    </div>
   </div>
 </template>
 
@@ -51,6 +58,7 @@ import type { EditorState, EditorStatus } from '../editor/types';
 import { logger } from 'bun-utilities/logging';
 import RichTextFloatingBar from './RichTextFloatingBar.vue';
 import StatusBar from './StatusBar.vue';
+import ImagePreview from './ImagePreview.vue';
 
 const htmlEditor = new HTMLBlockEditor();
 
@@ -452,6 +460,7 @@ export default defineComponent({
     StatusBar,
     FileBlock,
     TitleBlock,
+    ImagePreview,
     HeadingBlock,
     UnknownBlock,
     BlockWrapper,
@@ -462,3 +471,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+</style>

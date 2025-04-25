@@ -10,15 +10,15 @@
             data-variant="tertiary">Entfernen</button>
         </div>
       </AudioPlayer>
-      <ImagePreview v-else-if="block.content.type.startsWith('image')" :source="source" :type="block.content.type">
-        <div class="column">
+      <ImageThumbnail v-else-if="block.content.type.startsWith('image')" :source="source" :type="block.content.type">
+        <div class="row">
           <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" :contenteditable="editable">
             {{ block.content.name }}
           </div>
           <button v-if="editable" type="button" @click="$emit('remove', block.id)" data-display="plain"
             data-variant="tertiary">Entfernen</button>
         </div>
-      </ImagePreview>
+      </ImageThumbnail>
     </template>
     <template v-else>
       <LoadingSpinnerIcon v-if="file?.state === 'pending'" />
@@ -37,7 +37,7 @@ import type { FileRefBlock } from 'bun-utilities/cms';
 import type { CmsFile } from '../types';
 import LoadingSpinnerIcon from './icons/LoadingSpinnerIcon.vue';
 import WarningIcon from './icons/WarningIcon.vue';
-import ImagePreview from './ImagePreview.vue';
+import ImageThumbnail from './ImageThumbnail.vue';
 
 export default defineComponent({
   props: {
@@ -61,7 +61,7 @@ export default defineComponent({
   emits: ['remove'],
   components: {
     AudioPlayer,
-    ImagePreview,
+    ImageThumbnail,
     LoadingSpinnerIcon,
     WarningIcon,
   },
@@ -84,7 +84,7 @@ export default defineComponent({
     color: var(--internal-block-editor-color-primary);
   }
 
-  .column {
+  .row {
     width: 100%;
   }
 }
