@@ -3,6 +3,8 @@
   --internal-block-editor-color-primary: var(--block-editor-color-primary, #454545);
   --internal-block-editor-color-secondary: var(--block-editor-color-secondary, #d2d2d2);
   --internal-block-editor-color-tertiary: var(--block-editor-color-tertiary, #e5e5e5);
+
+  user-select: auto;
 }
 
 [data-element="editor"],

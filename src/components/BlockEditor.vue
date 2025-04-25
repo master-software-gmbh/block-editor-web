@@ -6,8 +6,6 @@
         :onFormatItalic="() => handleFormatItalic()" :onFormatUnderline="() => handleFormatUnderline()"></slot>
     </div>
 
-    <hr />
-
     <TitleBlock :title="document.title" />
     <template v-for="(block, index) in document.blocks">
       <BlockInsertionTarget @move="(id) => handleMove(id, index)" @file="(file) => handleFileDrop(file, index)" />
@@ -68,10 +66,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    editable: {
-      type: Booleanish,
-      required: true,
-    },
   },
   setup(props) {
     const config = inject<EditorConfiguration>('config');
@@ -120,7 +114,7 @@ export default defineComponent({
   },
   computed: {
     placeholder(): string | undefined {
-      return this.editable && this.isEmptyDocument ? 'Beginne zu schreiben..' : undefined;
+      return this.isEmptyDocument ? 'Beginne zu schreiben..' : undefined;
     },
     isEmptyDocument() {
       if (this.document.blocks.length > 1) {

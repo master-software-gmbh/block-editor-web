@@ -9,8 +9,8 @@ const editor = new HTMLBlockEditor();
 
 const default1 = `
 <div data-element="editor" contenteditable="">
-  <h1 data-element="title" data-placeholder="Titel">Beitrag vom 24.03.2025</h1>
   <div contenteditable="false"></div>
+  <h1 data-element="title" data-placeholder="Titel">Beitrag vom 24.03.2025</h1>
   <div data-element="insertion-target" contenteditable="false">
     <div></div>
   </div>
@@ -63,8 +63,8 @@ const default1 = `
 
 const default2 = `
 <div data-element="editor" contenteditable="">
-  <h1 data-element="title" data-placeholder="Titel"></h1>
   <div contenteditable="false"></div>
+  <h1 data-element="title" data-placeholder="Titel"></h1>
   <div data-element="insertion-target" contenteditable="false">
     <div></div>
   </div>
@@ -380,6 +380,27 @@ describe('getEditorRange', () => {
         type: 'title',
         startOffset: 0,
         endOffset: 0,
+      },
+    ]);
+  });
+
+  it('should work with a full title selection (double-click)', () => {
+    document.body.innerHTML = default1;
+
+    const startContainer = getTextChild(document.querySelector('[data-element="title"]'));
+    const endContainer = document.querySelector('[data-element="title"] + [data-element="insertion-target"]')!;
+
+    const domRange = new Range();
+    domRange.setStart(startContainer, 0);
+    domRange.setEnd(endContainer, 0);
+
+    const result: EditorRange = editor.getShallowEditorRange(domRange);
+
+    expect(result).toEqual([
+      {
+        type: 'title',
+        startOffset: 0,
+        endOffset: 22,
       },
     ]);
   });

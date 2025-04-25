@@ -212,11 +212,19 @@ export class HTMLBlockEditor {
     }
 
     if (startElement?.type !== 'span' || endElement?.type !== 'span') {
+      let endOffset: number;
+
+      if (startElement?.type === 'title' && endElement === null) {
+        endOffset = range.startContainer.textContent?.length ?? 0; // Full title selected
+      } else {
+        endOffset = Math.max(range.startOffset, range.endOffset);  // Prevent startOffset from being larger than endOffset
+      }
+
       return [
         {
           type: 'title',
           startOffset: range.startOffset,
-          endOffset: Math.max(range.startOffset, range.endOffset), // Prevent startOffset from being larger than endOffset
+          endOffset: endOffset,
         },
       ];
     }
