@@ -24,10 +24,10 @@ export default defineComponent({
 
 <style lang="css" scoped>
 [data-element="title"] {
+  margin: 0;
   z-index: 1;
   min-height: 1em;
   line-height: 1em;
   position: relative;
-  margin: 0.5em 0 0 0;
 }
 </style>

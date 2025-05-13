@@ -20,6 +20,7 @@ div {
   padding: 4px;
   display: none;
   column-gap: 5px;
+  user-select: none;
   position: absolute;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 14px 28px -6px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px, rgba(84, 72, 49, 0.08) 0px 0px 0px 1px;

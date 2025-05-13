@@ -16,10 +16,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    type: {
-      type: String,
-      required: true,
-    },
   },
   methods: {
     showPreview() {
@@ -38,8 +34,8 @@ export default defineComponent({
   align-items: center;
 
   >img {
-    width: 50px;
-    height: 50px;
+    width: var(--internal-block-editor-image-thumbnail-width);
+    height: var(--internal-block-editor-image-thumbnail-width);
     flex-shrink: 0;
     object-fit: cover;
     border-radius: var(--internal-block-editor-border-radius);

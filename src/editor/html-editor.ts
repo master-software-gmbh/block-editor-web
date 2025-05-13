@@ -54,12 +54,12 @@ export class HTMLBlockEditor {
     return this.blockEditor.applyAction(new EditorState(document, []), action);
   }
 
-  applyRangeAction(document: StandardDocument, action: BlockEditorAction, staticRange?: StaticRange): EditorState {
-    const fullRange = this.selectionToEditorRange(document, staticRange);
+  applyRangeAction(document: StandardDocument, action: BlockEditorAction, range?: Range): EditorState {
+    const fullRange = this.selectionToEditorRange(document, range);
     return this.blockEditor.applyAction(new EditorState(document, fullRange), action);
   }
 
-  selectionToEditorRange(document: StandardDocument, selection?: StaticRange): EditorRange {
+  selectionToEditorRange(document: StandardDocument, selection?: Range): EditorRange {
     let range = selection;
 
     if (!range) {
@@ -147,12 +147,14 @@ export class HTMLBlockEditor {
     return selection;
   }
 
-  getShallowEditorRange(range: StaticRange): EditorRange {
+  getShallowEditorRange(range: Range): EditorRange {
     let startElement: EditorElement | null = null;
     let startOffset = 0;
     let endElement: EditorElement | null = null;
     let endOffset: number | undefined;
     let startEndOffset: number | undefined;
+
+    this.normalizeRange(range);
 
     if (range.startContainer instanceof Text) {
       startElement = this.getElementAtNode(range.startContainer);
@@ -184,6 +186,11 @@ export class HTMLBlockEditor {
           const textContent = this.getSpanTextContent(endElement.blockId, endElement.index);
           endOffset = textContent?.length ?? 0;
         }
+      }
+
+      if (endElement === null) {
+        endElement = this.getElementAtNode(range.endContainer);
+        endOffset = range.endContainer.textContent?.length ?? 0; // length of the last span!
       }
     }
 
@@ -217,7 +224,7 @@ export class HTMLBlockEditor {
       if (startElement?.type === 'title' && endElement === null) {
         endOffset = range.startContainer.textContent?.length ?? 0; // Full title selected
       } else {
-        endOffset = Math.max(range.startOffset, range.endOffset);  // Prevent startOffset from being larger than endOffset
+        endOffset = Math.max(range.startOffset, range.endOffset); // Prevent startOffset from being larger than endOffset
       }
 
       return [
@@ -261,6 +268,94 @@ export class HTMLBlockEditor {
         endOffset: endOffset ?? range.endOffset,
       },
     ];
+  }
+
+  private normalizeRange(range: Range): Range {
+    const unwrapChildren = (range: Range) => {
+      if (range.startContainer.nodeType !== Node.TEXT_NODE) {
+        let childNode: ChildNode | null = null;
+        let childOffset = 0;
+
+        if (range.startOffset === range.startContainer.childNodes.length) {
+          // If the start offset is at the end of the container, set it to the end of the last child
+          childNode = range.startContainer.lastChild;
+          childOffset = childNode?.textContent?.length ?? 0;
+        } else {
+          childNode = range.startContainer.childNodes.item(range.startOffset) as ChildNode | null;
+        }
+
+        if (childNode?.nodeType === Node.TEXT_NODE) {
+          range.setStart(childNode, childOffset);
+          console.log('Set range start to child node');
+        } else {
+          console.log('Failed to set range start to child node');
+        }
+      }
+
+      if (range.endContainer.nodeType !== Node.TEXT_NODE) {
+        let childNode: ChildNode | null = null;
+        let childOffset = 0;
+
+        if (range.endOffset === range.endContainer.childNodes.length) {
+          // If the end offset is at the end of the container, set it to the end of the last child
+          childNode = range.endContainer.lastChild;
+          childOffset = childNode?.textContent?.length ?? 0;
+        } else {
+          childNode = range.endContainer.childNodes.item(range.endOffset) as ChildNode | null;
+        }
+
+        if (childNode?.nodeType === Node.TEXT_NODE) {
+          range.setEnd(childNode, childOffset);
+          console.log('Set range end to child node');
+        } else {
+          console.log('Failed to set range end to child node');
+        }
+      }
+    };
+
+    const moveLateral = (range: Range) => {
+      if (range.startContainer.nodeType === Node.TEXT_NODE) {
+        if (range.startContainer.textContent === '' && range.startOffset === 0) {
+          const previousNode = range.startContainer.previousSibling;
+
+          if (previousNode) {
+            range.setStart(previousNode, previousNode.childNodes.length);
+            console.log('Set range start to previous sibling');
+          } else {
+            const nextNode = range.startContainer.nextSibling;
+
+            if (nextNode) {
+              range.setStart(nextNode, 0);
+              console.log('Set range start to next sibling');
+            }
+          }
+        }
+      }
+
+      if (range.endContainer.nodeType === Node.TEXT_NODE) {
+        if (range.endContainer.textContent === '' && range.endOffset === 0) {
+          const previousNode = range.endContainer.previousSibling;
+
+          if (previousNode) {
+            range.setEnd(previousNode, previousNode.childNodes.length);
+            console.log('Set range end to previous sibling');
+          } else {
+            const nextNode = range.endContainer.nextSibling;
+
+            if (nextNode) {
+              range.setEnd(nextNode, 0);
+              console.log('Set range end to next sibling');
+            }
+          }
+        }
+      }
+    };
+
+    unwrapChildren(range);
+    moveLateral(range);
+    unwrapChildren(range);
+
+    return range;
   }
 
   private findChildAttribute(node: Node, attribute: string): string | null {

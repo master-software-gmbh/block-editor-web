@@ -1,9 +1,12 @@
-[data-element="editor"] {
+[data-element="editor-root"] {
   --internal-block-editor-border-radius: var(--block-editor-border-radius, 2px);
   --internal-block-editor-color-primary: var(--block-editor-color-primary, #454545);
   --internal-block-editor-color-secondary: var(--block-editor-color-secondary, #d2d2d2);
   --internal-block-editor-color-tertiary: var(--block-editor-color-tertiary, #e5e5e5);
+  --internal-block-editor-image-thumbnail-width: var(--block-editor-image-thumbnail-width, 50px);
+}
 
+[data-element="editor"] {
   user-select: auto;
 }
 

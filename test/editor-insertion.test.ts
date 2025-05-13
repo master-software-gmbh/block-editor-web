@@ -1623,4 +1623,282 @@ describe('BlockEditor', () => {
 
     expect(newState).toEqual(expectedState);
   });
+
+  it('should insert text at the beginning of the title', () => {
+    const blockId = crypto.randomUUID();
+
+    const state = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            id: blockId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'title',
+          startOffset: 0,
+          endOffset: 0,
+        },
+      ],
+    );
+
+    const expectedState = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'ABCTest Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            id: blockId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'title',
+          startOffset: 3,
+          endOffset: 3,
+        },
+      ],
+    );
+
+    const action: BlockEditorAction = {
+      type: 'insert_text',
+      text: 'ABC',
+    };
+
+    const editor = new BlockEditor();
+    const newState = editor.applyAction(state, action);
+
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should insert text at the end of the title', () => {
+    const blockId = crypto.randomUUID();
+
+    const state = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            id: blockId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'title',
+          startOffset: 13,
+          endOffset: 13,
+        },
+      ],
+    );
+
+    const expectedState = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test DocumentABC',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            id: blockId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'title',
+          startOffset: 16,
+          endOffset: 16,
+        },
+      ],
+    );
+
+    const action: BlockEditorAction = {
+      type: 'insert_text',
+      text: 'ABC',
+    };
+
+    const editor = new BlockEditor();
+    const newState = editor.applyAction(state, action);
+
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should insert new line at the end of the title', () => {
+    const blockId = crypto.randomUUID();
+    const blockId2 = crypto.randomUUID();
+
+    const state = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            id: blockId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'title',
+          startOffset: 13,
+          endOffset: 13,
+        },
+      ],
+    );
+
+    const expectedState = new EditorState(
+      {
+        createdAt: date,
+        updatedAt: date,
+        title: 'Test Document',
+        id: documentId,
+        blocks: [
+          {
+            type: 'rich-text',
+            id: blockId2,
+            content: {
+              text: '',
+              spans: [
+                {
+                  text: '',
+                  attributes: {},
+                },
+              ],
+            },
+          },
+          {
+            type: 'rich-text',
+            id: blockId,
+            content: {
+              text: 'Hello world',
+              spans: [
+                {
+                  text: 'Hello',
+                  attributes: {},
+                },
+                {
+                  text: ' world',
+                  attributes: {
+                    bold: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      [
+        {
+          type: 'rich_text',
+          blockId: blockId2,
+          spanIndex: 0,
+          startOffset: 0,
+        },
+      ],
+    );
+
+    const action: BlockEditorAction = {
+      type: 'insert_paragraph',
+    };
+
+    const editor = new BlockEditor(() => blockId2);
+    const newState = editor.applyAction(state, action);
+
+    expect(newState).toEqual(expectedState);
+  });
 });

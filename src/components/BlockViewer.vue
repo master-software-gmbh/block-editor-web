@@ -1,5 +1,5 @@
 <template>
-  <div data-element="editor">
+  <RootWrapper>
     <TitleBlock :title="document.title" />
 
     <div class="blocks">
@@ -15,8 +15,7 @@
       <slot name="bottom"></slot>
     </div>
 
-    <ImagePreview />
-  </div>
+  </RootWrapper>
 </template>
 
 <script lang="ts">
@@ -26,7 +25,7 @@ import HeadingBlock from './HeadingBlock.vue';
 import RichTextBlock from './RichTextBlock.vue';
 import TitleBlock from './TitleBlock.vue';
 import BlockWrapper from './BlockWrapper.vue';
-import ImagePreview from './ImagePreview.vue';
+import RootWrapper from './RootWrapper.vue';
 
 export default defineComponent({
   props: {
@@ -53,9 +52,9 @@ export default defineComponent({
   components: {
     FileBlock,
     TitleBlock,
+    RootWrapper,
     HeadingBlock,
     BlockWrapper,
-    ImagePreview,
     RichTextBlock,
   },
 });

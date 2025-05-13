@@ -38,8 +38,41 @@ export class BlockEditor {
 
         return newState;
       }
-      case 'delete_text':
+      case 'delete_text': {
+        if (state.selection.length === 1) {
+          const firstSelection = state.selection[0];
+
+          if (firstSelection.startOffset === firstSelection.endOffset) {
+            // If the selection is empty, we need to delete the previous character
+            if (firstSelection.startOffset > 0) {
+              firstSelection.startOffset -= 1;
+              console.log('Deleting previous character');
+            } else if (firstSelection.type === 'rich_text') {
+              // If the selection is at the beginning of the block, we need to delete the current block
+              const blockIndex = state.document.blocks.findIndex((b) => b.id === firstSelection.blockId);
+
+              // Find the previous block of type rich-text
+              const block = state.document.blocks
+                .slice(0, blockIndex)
+                .reverse()
+                .find((b) => b.type === 'rich-text');
+
+              if (block?.type === 'rich-text') {
+                // Add the block to the beginning of the selection
+                state.selection.unshift({
+                  type: 'rich_text',
+                  blockId: block.id,
+                  spanIndex: block.content.spans.length - 1,
+                  startOffset: block.content.spans.at(-1)?.text.length ?? 0,
+                  endOffset: block.content.spans.at(-1)?.text.length ?? 0,
+                })
+              }
+            }
+          }
+        }
+
         return this.replaceText(state, '');
+      }
       case 'set_attribute':
         return this.applyAttributes(state, { [action.name]: action.value });
       case 'toggle_attribute': {
@@ -303,17 +336,41 @@ export class BlockEditor {
 
     for (const range of state.selection) {
       if (range.type === 'title') {
-        const cleanText = text.replace(/\n/g, '');
-        state.document.title =
-          state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
+        if (text === '\n') {
+          // A line break inserts an empty block below the title
 
-        newSelection = [
-          {
-            type: 'title',
-            startOffset: range.startOffset + cleanText.length,
-            endOffset: range.startOffset + cleanText.length,
-          },
-        ];
+          // Initialize a new empty rich text block
+          const newBlock = this.createEmptyRichTextBlock({});
+
+          // Override selection to be a cursor at the beginning of the new block
+          newSelection = [
+            {
+              blockId: newBlock.id,
+              spanIndex: 0,
+              startOffset: 0,
+              type: 'rich_text',
+            },
+          ];
+
+          remainingText = '';
+
+          updatedBlocks.push(newBlock);
+        } else {
+          const cleanText = text.replace(/\n/g, '');
+          state.document.title =
+            state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
+
+          const newStartOffset = range.startOffset + cleanText.length;
+          const newEndOffset = range.startOffset + cleanText.length;
+
+          newSelection = [
+            {
+              type: 'title',
+              startOffset: newStartOffset,
+              endOffset: newEndOffset,
+            },
+          ];
+        }
       }
     }
 

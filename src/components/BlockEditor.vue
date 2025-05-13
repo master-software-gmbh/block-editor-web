@@ -1,40 +1,35 @@
 <template>
-  <div data-element="editor" contenteditable="true" @beforeinput="handleBeforeInput" @keydown="handleKeydown">
-
-    <div contenteditable="false">
-      <slot name="title" :onSave="handleSave" :onAddFile="handleAddFile" :onFormatBold="() => handleFormatBold()"
-        :onFormatItalic="() => handleFormatItalic()" :onFormatUnderline="() => handleFormatUnderline()"></slot>
+  <RootWrapper>
+    <div data-element="editor" contenteditable="true" @beforeinput="handleBeforeInput" @keydown="handleKeydown">
+      <div contenteditable="false">
+        <slot name="title" :onSave="handleSave" :onAddFile="handleAddFile" :onFormatBold="() => handleFormatBold()"
+          :onFormatItalic="() => handleFormatItalic()" :onFormatUnderline="() => handleFormatUnderline()"></slot>
+      </div>
+      <TitleBlock :title="document.title" />
+      <template v-for="(block, index) in document.blocks">
+        <BlockInsertionTarget @move="(id) => handleMove(id, index)" @file="(file) => handleFileDrop(file, index)" />
+        <BlockWrapper :block-id="block.id">
+          <RichTextBlock v-if="block.type === 'rich-text'" :block="block"
+            :placeholder="index === 0 ? placeholder : undefined" />
+          <HeadingBlock v-else-if="block.type === 'heading'" :block="block" />
+          <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]"
+            :source="getFileSourceUrl(block.content.id)" @remove="handleRemoveBlock" />
+          <UnknownBlock v-else="block.type" :block="block" />
+        </BlockWrapper>
+      </template>
+      <BlockInsertionTarget @move="(id) => handleMove(id, document.blocks.length)"
+        @file="(file) => handleFileDrop(file, document.blocks.length)" />
+      <hr style="margin-top: 5em" />
+      <div class="bottom" contenteditable="false">
+        <StatusBar :document="document" :status="status" />
+        <slot name="bottom" :onSave="handleSave"></slot>
+      </div>
+      <div contenteditable="false">
+        <RichTextFloatingBar @formatBold="handleFormatBold" @formatItalic="handleFormatItalic"
+          @formatUnderline="handleFormatUnderline" />
+      </div>
     </div>
-
-    <TitleBlock :title="document.title" />
-    <template v-for="(block, index) in document.blocks">
-      <BlockInsertionTarget @move="(id) => handleMove(id, index)" @file="(file) => handleFileDrop(file, index)" />
-      <BlockWrapper :block-id="block.id">
-        <RichTextBlock v-if="block.type === 'rich-text'" :block="block"
-          :placeholder="index === 0 ? placeholder : undefined" />
-        <HeadingBlock v-else-if="block.type === 'heading'" :block="block" />
-        <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]"
-          :source="getFileSourceUrl(block.content.id)" @remove="handleRemoveBlock" />
-        <UnknownBlock v-else="block.type" :block="block" />
-      </BlockWrapper>
-    </template>
-    <BlockInsertionTarget @move="(id) => handleMove(id, document.blocks.length)"
-      @file="(file) => handleFileDrop(file, document.blocks.length)" />
-
-    <hr style="margin-top: 5em" />
-
-    <div class="bottom" contenteditable="false">
-      <StatusBar :document="document" :status="status" />
-      <slot name="bottom" :onSave="handleSave"></slot>
-    </div>
-
-
-    <div contenteditable="false">
-      <RichTextFloatingBar @formatBold="handleFormatBold" @formatItalic="handleFormatItalic"
-        @formatUnderline="handleFormatUnderline" />
-      <ImagePreview />
-    </div>
-  </div>
+  </RootWrapper>
 </template>
 
 <script lang="ts">
@@ -56,7 +51,7 @@ import type { EditorState, EditorStatus } from '../editor/types';
 import { logger } from 'bun-utilities/logging';
 import RichTextFloatingBar from './RichTextFloatingBar.vue';
 import StatusBar from './StatusBar.vue';
-import ImagePreview from './ImagePreview.vue';
+import RootWrapper from './RootWrapper.vue';
 
 const htmlEditor = new HTMLBlockEditor();
 
@@ -166,7 +161,8 @@ export default defineComponent({
   methods: {
     handleBeforeInput(event: InputEvent) {
       event.preventDefault();
-      const range = event.getTargetRanges().at(0);
+      const selection = window.getSelection();
+      const range = selection?.getRangeAt(0);
 
       if (!range) {
         logger.warn('Received beforeinput event without range', { type: event.inputType });
@@ -241,7 +237,7 @@ export default defineComponent({
 
       return event.dataTransfer?.getData("text/plain");
     },
-    handleFormatBold(range?: StaticRange) {
+    handleFormatBold(range?: Range) {
       const newState = htmlEditor.applyRangeAction(
         this.document,
         {
@@ -252,7 +248,7 @@ export default defineComponent({
       );
       this.updateEditorState(newState);
     },
-    handleFormatItalic(range?: StaticRange) {
+    handleFormatItalic(range?: Range) {
       const newState = htmlEditor.applyRangeAction(
         this.document,
         {
@@ -263,7 +259,7 @@ export default defineComponent({
       );
       this.updateEditorState(newState);
     },
-    handleFormatUnderline(range?: StaticRange) {
+    handleFormatUnderline(range?: Range) {
       const newState = htmlEditor.applyRangeAction(
         this.document,
         {
@@ -274,20 +270,20 @@ export default defineComponent({
       );
       this.updateEditorState(newState);
     },
-    handleDeleteContentBackward(range: StaticRange) {
+    handleDeleteContentBackward(range: Range) {
       const newState = htmlEditor.applyRangeAction(this.document, {
         type: 'delete_text',
       }, range);
       this.updateEditorState(newState);
     },
-    handleInsertText(range: StaticRange, text: string) {
+    handleInsertText(range: Range, text: string) {
       const newState = htmlEditor.applyRangeAction(this.document, {
         type: 'insert_text',
         text: text,
       }, range);
       this.updateEditorState(newState);
     },
-    handleInsertParagraph(range: StaticRange) {
+    handleInsertParagraph(range: Range) {
       const newState = htmlEditor.applyRangeAction(this.document, {
         type: 'insert_paragraph',
       }, range);
@@ -303,7 +299,7 @@ export default defineComponent({
         this.autoSave();
       });
     },
-    handlePaste(range: StaticRange, data: string) {
+    handlePaste(range: Range, data: string) {
       const newState = htmlEditor.applyRangeAction(this.document, {
         type: 'insert_text',
         text: data,
@@ -454,7 +450,7 @@ export default defineComponent({
     StatusBar,
     FileBlock,
     TitleBlock,
-    ImagePreview,
+    RootWrapper,
     HeadingBlock,
     UnknownBlock,
     BlockWrapper,

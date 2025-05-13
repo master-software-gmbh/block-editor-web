@@ -10,7 +10,7 @@
             data-variant="tertiary">Entfernen</button>
         </div>
       </AudioPlayer>
-      <ImageThumbnail v-else-if="block.content.type.startsWith('image')" :source="source" :type="block.content.type">
+      <ImageThumbnail v-else-if="block.content.type.startsWith('image')" :source="source">
         <div class="row">
           <div data-placeholder="Titel" data-editing-type="plain" data-editing-property="name" :contenteditable="editable">
             {{ block.content.name }}
