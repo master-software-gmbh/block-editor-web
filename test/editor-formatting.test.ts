@@ -12,16 +12,17 @@ describe('set_attribute', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello world',
@@ -47,16 +48,17 @@ describe('set_attribute', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello world',
@@ -96,16 +98,17 @@ describe('set_attribute', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello world',
@@ -135,16 +138,17 @@ describe('set_attribute', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello world',
@@ -188,16 +192,17 @@ describe('set_attribute', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello world!',
@@ -223,16 +228,17 @@ describe('set_attribute', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello ',
@@ -286,16 +292,17 @@ describe('get_attribute', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello world',
@@ -328,16 +335,17 @@ describe('get_attribute', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello ',

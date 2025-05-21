@@ -8,19 +8,19 @@
     "build": "vite build"
   },
   "dependencies": {
-    "bun-utilities": "master-software-gmbh/bun-utilities#v1.58.0",
-    "valibot": "^1.0.0",
-    "vue": "^3.5.13"
+    "bun-utilities": "master-software-gmbh/ts-utilities#v1.79.0",
+    "valibot": "^1.1.0",
+    "vue": "^3.5.14"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "^17.4.4",
-    "@types/bun": "^1.2.10",
-    "@types/node": "^22.14.1",
-    "@vitejs/plugin-vue": "^5.2.3",
+    "@happy-dom/global-registrator": "^17.4.7",
+    "@types/bun": "^1.2.13",
+    "@types/node": "^22.15.21",
+    "@vitejs/plugin-vue": "^5.2.4",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.8.3",
-    "vite": "^6.3.2",
-    "vite-plugin-dts": "^4.5.3",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4",
     "vue-tsc": "^2.2.10"
   }
 }

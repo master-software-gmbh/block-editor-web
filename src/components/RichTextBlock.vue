@@ -8,13 +8,13 @@
 </template>
 
 <script lang="ts">
-import type { RichTextBlock } from 'bun-utilities/cms';
+import type { RichTextBlockDto } from 'bun-utilities/cms';
 import { defineComponent, type PropType } from 'vue';
 
 export default defineComponent({
   props: {
     block: {
-      type: Object as PropType<RichTextBlock>,
+      type: Object as PropType<RichTextBlockDto>,
       required: true,
     },
     placeholder: {

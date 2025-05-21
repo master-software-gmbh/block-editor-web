@@ -1,4 +1,4 @@
-import type { RichTextAttributeType, StandardDocument } from 'bun-utilities/cms';
+import type { DocumentBlockDto, RichTextAttributeType } from 'bun-utilities/cms';
 import { EditorState, type BlockEditorAction, type EditorRange } from './types';
 import { BlockEditor } from './block-editor';
 
@@ -50,16 +50,16 @@ export type EditorRangeAction = {
 export class HTMLBlockEditor {
   readonly blockEditor = new BlockEditor();
 
-  applyAction(document: StandardDocument, action: BlockEditorAction): EditorState {
+  applyAction(document: DocumentBlockDto, action: BlockEditorAction): EditorState {
     return this.blockEditor.applyAction(new EditorState(document, []), action);
   }
 
-  applyRangeAction(document: StandardDocument, action: BlockEditorAction, range?: Range): EditorState {
+  applyRangeAction(document: DocumentBlockDto, action: BlockEditorAction, range?: Range): EditorState {
     const fullRange = this.selectionToEditorRange(document, range);
     return this.blockEditor.applyAction(new EditorState(document, fullRange), action);
   }
 
-  selectionToEditorRange(document: StandardDocument, selection?: Range): EditorRange {
+  selectionToEditorRange(document: DocumentBlockDto, selection?: Range): EditorRange {
     let range = selection;
 
     if (!range) {

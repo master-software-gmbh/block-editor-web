@@ -1,9 +1,9 @@
 import type {
+  RichTextBlockDto,
+  RichTextSpanDto,
+  DocumentBlockDto,
   RichTextAttributeType,
-  RichTextBlock,
-  RichTextSpan,
-  StandardBlock,
-  StandardDocument,
+  StandardBlockDto,
 } from 'bun-utilities/cms';
 import { logger } from 'bun-utilities/logging';
 import { compareRecords } from 'bun-utilities/map';
@@ -12,7 +12,7 @@ import { EditorState, type BlockEditorAction, type EditorRange, type RichTextRan
 
 logger.format = 'logfmt';
 
-type Span = RichTextBlock['content']['spans'][number];
+type Span = RichTextBlockDto['content']['spans'][number];
 
 export class BlockEditor {
   private readonly uuidFactory: () => string;
@@ -49,10 +49,10 @@ export class BlockEditor {
               console.log('Deleting previous character');
             } else if (firstSelection.type === 'rich_text') {
               // If the selection is at the beginning of the block, we need to delete the current block
-              const blockIndex = state.document.blocks.findIndex((b) => b.id === firstSelection.blockId);
+              const blockIndex = state.document.children.findIndex((b) => b.id === firstSelection.blockId);
 
               // Find the previous block of type rich-text
-              const block = state.document.blocks
+              const block = state.document.children
                 .slice(0, blockIndex)
                 .reverse()
                 .find((b) => b.type === 'rich-text');
@@ -65,7 +65,7 @@ export class BlockEditor {
                   spanIndex: block.content.spans.length - 1,
                   startOffset: block.content.spans.at(-1)?.text.length ?? 0,
                   endOffset: block.content.spans.at(-1)?.text.length ?? 0,
-                })
+                });
               }
             }
           }
@@ -115,7 +115,7 @@ export class BlockEditor {
     const blockToMove = this.getBlockById(state.document, id);
 
     if (blockToMove) {
-      const fromIndex = state.document.blocks.indexOf(blockToMove);
+      const fromIndex = state.document.children.indexOf(blockToMove);
 
       if (fromIndex > -1) {
         if (fromIndex < index) {
@@ -124,8 +124,8 @@ export class BlockEditor {
 
         logger.debug(`Moving block ${id} from ${fromIndex} to ${index}`);
 
-        state.document.blocks.splice(fromIndex, 1);
-        state.document.blocks.splice(index, 0, blockToMove);
+        state.document.children.splice(fromIndex, 1);
+        state.document.children.splice(index, 0, blockToMove);
       }
     }
 
@@ -133,29 +133,29 @@ export class BlockEditor {
   }
 
   private removeBlock(state: EditorState, id: string): EditorState {
-    const index = state.document.blocks.findIndex((block) => block.id === id);
+    const index = state.document.children.findIndex((block) => block.id === id);
 
     if (index > -1) {
-      state.document.blocks.splice(index, 1);
+      state.document.children.splice(index, 1);
     }
 
     return state;
   }
 
-  private getBlockById(document: StandardDocument, id: string) {
-    return document.blocks.find((block) => block.id === id);
+  private getBlockById(document: DocumentBlockDto, id: string) {
+    return document.children.find((block) => block.id === id);
   }
 
   private applyAttributes(state: EditorState, attributes: Record<string, RichTextAttributeType>): EditorState {
     const newSelection: EditorRange = [];
     const updatedDocument = state.document;
 
-    for (const block of updatedDocument.blocks) {
+    for (const block of updatedDocument.children) {
       if (block.type !== 'rich-text') {
         continue;
       }
 
-      const newSpans: RichTextSpan[] = [];
+      const newSpans: RichTextSpanDto[] = [];
 
       for (const [index, span] of block.content.spans.entries()) {
         const blockRange = state.selection.find(
@@ -205,8 +205,6 @@ export class BlockEditor {
       }
 
       block.content.spans = newSpans;
-      const plainText = this.getPlainTextRepresentation(block);
-      block.content.text = plainText;
     }
 
     return new EditorState(updatedDocument, newSelection);
@@ -224,7 +222,7 @@ export class BlockEditor {
     };
   }
 
-  expandRange(document: StandardDocument, range: EditorRange): EditorRange {
+  expandRange(document: DocumentBlockDto, range: EditorRange): EditorRange {
     const firstElement = range.at(0);
     const lastElement = range.at(1);
 
@@ -234,9 +232,9 @@ export class BlockEditor {
 
     const newRange: EditorRange = [];
 
-    const firstBlockIndex = document.blocks.findIndex((block) => block.id === firstElement.blockId);
-    const lastBlockIndex = document.blocks.findIndex((block) => block.id === lastElement.blockId);
-    const blockSlice = document.blocks.slice(firstBlockIndex, lastBlockIndex + 1);
+    const firstBlockIndex = document.children.findIndex((block) => block.id === firstElement.blockId);
+    const lastBlockIndex = document.children.findIndex((block) => block.id === lastElement.blockId);
+    const blockSlice = document.children.slice(firstBlockIndex, lastBlockIndex + 1);
 
     for (const block of blockSlice) {
       if (block.type === 'rich-text') {
@@ -273,14 +271,14 @@ export class BlockEditor {
     return newRange;
   }
 
-  private createEmptyRichTextBlock(attributes: Record<string, RichTextAttributeType>): RichTextBlock {
+  private createEmptyRichTextBlock(attributes: Record<string, RichTextAttributeType>): RichTextBlockDto {
     const newBlockId = this.uuidFactory();
 
     return {
+      children: [],
       id: newBlockId,
       type: 'rich-text',
       content: {
-        text: '',
         spans: [
           {
             text: '',
@@ -294,7 +292,7 @@ export class BlockEditor {
   private replaceText(state: EditorState, text: string): EditorState {
     logger.info(`Replacing text with "${text}"`);
 
-    const updatedBlocks: StandardBlock[] = [];
+    const updatedBlocks: StandardBlockDto[] = [];
     let newSelection: EditorRange = [];
 
     // Set selection to be at the end of the first element's replaced content
@@ -332,7 +330,7 @@ export class BlockEditor {
       return newBlock;
     };
 
-    let currentBlock: RichTextBlock | undefined;
+    let currentBlock: RichTextBlockDto | undefined;
 
     for (const range of state.selection) {
       if (range.type === 'title') {
@@ -357,8 +355,10 @@ export class BlockEditor {
           updatedBlocks.push(newBlock);
         } else {
           const cleanText = text.replace(/\n/g, '');
-          state.document.title =
-            state.document.title.slice(0, range.startOffset) + cleanText + state.document.title.slice(range.endOffset);
+          state.document.content.title =
+            state.document.content.title.slice(0, range.startOffset) +
+            cleanText +
+            state.document.content.title.slice(range.endOffset);
 
           const newStartOffset = range.startOffset + cleanText.length;
           const newEndOffset = range.startOffset + cleanText.length;
@@ -375,9 +375,9 @@ export class BlockEditor {
     }
 
     // Iterate over each block in the document
-    for (const block of state.document.blocks) {
+    for (const block of state.document.children) {
       if (!currentBlock) {
-        currentBlock = copyBlock(block) as RichTextBlock;
+        currentBlock = copyBlock(block) as RichTextBlockDto;
       }
 
       let isLastSelectedBlock = false;
@@ -473,33 +473,13 @@ export class BlockEditor {
 
     const updatedDocument = this.optimizeDocument(Blocks.set(state.document, updatedBlocks), newSelection);
 
-    for (const block of updatedDocument.blocks) {
-      if (block.type === 'rich-text') {
-        const plainText = this.getPlainTextRepresentation(block);
-        block.content.text = plainText;
-      }
-    }
-
     return new EditorState(updatedDocument, newSelection);
   }
 
-  private getPlainTextRepresentation(block: StandardBlock): string {
-    switch (block.type) {
-      case 'rich-text':
-        return block.content.spans.map((span) => span.text).join('');
-      default:
-        if ('text' in block.content) {
-          return block.content.text;
-        }
-
-        return '';
-    }
-  }
-
-  private optimizeDocument(document: StandardDocument, newSelection: EditorRange): StandardDocument {
+  private optimizeDocument(document: DocumentBlockDto, newSelection: EditorRange): DocumentBlockDto {
     let updatedDocument = document;
 
-    for (const block of document.blocks) {
+    for (const block of document.children) {
       if (block.type === 'rich-text') {
         updatedDocument = compose(Blocks, byId(block.id)).set(
           updatedDocument,
@@ -510,7 +490,7 @@ export class BlockEditor {
 
     updatedDocument = Blocks.set(
       updatedDocument,
-      updatedDocument.blocks.filter((block) => {
+      updatedDocument.children.filter((block) => {
         if (block.type === 'rich-text' && block.content.spans.length === 0) {
           return false;
         }
@@ -522,7 +502,7 @@ export class BlockEditor {
     return updatedDocument;
   }
 
-  private optimizeRichTextBlock(block: RichTextBlock, newSelection: EditorRange): RichTextBlock {
+  private optimizeRichTextBlock(block: RichTextBlockDto, newSelection: EditorRange): RichTextBlockDto {
     const optimizedSpans: Span[] = [];
 
     for (const [index, span] of block.content.spans.entries()) {
@@ -579,7 +559,7 @@ export class BlockEditor {
   }
 }
 
-const Blocks = createLens<StandardDocument, 'blocks'>('blocks');
-const RichTextContent = createLens<RichTextBlock, 'content'>('content');
-const RichTextSpans = createLens<RichTextBlock['content'], 'spans'>('spans');
+const Blocks = createLens<DocumentBlockDto, 'children'>('children');
+const RichTextContent = createLens<RichTextBlockDto, 'content'>('content');
+const RichTextSpans = createLens<RichTextBlockDto['content'], 'spans'>('spans');
 const SpanText = createLens<Span, 'text'>('text');

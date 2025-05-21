@@ -1,7 +1,3 @@
-import type { PropType } from 'vue';
-
-export const Booleanish = [String, Boolean] as PropType<boolean | 'true' | 'false'>;
-
 export const KeyName = {
   ArrowLeft: 'ArrowLeft',
   ArrowRight: 'ArrowRight',

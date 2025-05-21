@@ -5,20 +5,19 @@
         <slot name="title" :onSave="handleSave" :onAddFile="handleAddFile" :onFormatBold="() => handleFormatBold()"
           :onFormatItalic="() => handleFormatItalic()" :onFormatUnderline="() => handleFormatUnderline()"></slot>
       </div>
-      <TitleBlock :title="document.title" />
-      <template v-for="(block, index) in document.blocks">
+      <TitleBlock :title="document.content.title" />
+      <template v-for="(block, index) in document.children">
         <BlockInsertionTarget @move="(id) => handleMove(id, index)" @file="(file) => handleFileDrop(file, index)" />
         <BlockWrapper :block-id="block.id">
           <RichTextBlock v-if="block.type === 'rich-text'" :block="block"
             :placeholder="index === 0 ? placeholder : undefined" />
-          <HeadingBlock v-else-if="block.type === 'heading'" :block="block" />
           <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]"
             :source="getFileSourceUrl(block.content.id)" @remove="handleRemoveBlock" />
           <UnknownBlock v-else="block.type" :block="block" />
         </BlockWrapper>
       </template>
-      <BlockInsertionTarget @move="(id) => handleMove(id, document.blocks.length)"
-        @file="(file) => handleFileDrop(file, document.blocks.length)" />
+      <BlockInsertionTarget @move="(id) => handleMove(id, document.children.length)"
+        @file="(file) => handleFileDrop(file, document.children.length)" />
       <hr style="margin-top: 5em" />
       <div class="bottom" contenteditable="false">
         <StatusBar :document="document" :status="status" />
@@ -35,14 +34,13 @@
 <script lang="ts">
 import { defineComponent, inject, ref } from 'vue';
 import type { EditorConfiguration, CmsFile } from '../types';
-import { Booleanish, KeyName } from '../utilities';
+import { KeyName } from '../utilities';
 import BlockInsertionTarget from './BlockInsertionTarget.vue';
 import FileBlock from './FileBlock.vue';
-import HeadingBlock from './HeadingBlock.vue';
 import RichTextBlock from './RichTextBlock.vue';
 import PlainTextBlock from './PlainTextBlock.vue';
 import TitleBlock from './TitleBlock.vue';
-import type { FileRefBlock, StandardBlock, StandardDocument } from 'bun-utilities/cms';
+import type { FileBlockDto, StandardBlockDto, DocumentBlockDto } from 'bun-utilities/cms';
 import { HTMLBlockEditor } from '../editor/html-editor';
 import UnknownBlock from './UnknownBlock.vue';
 import BlockWrapper from './BlockWrapper.vue';
@@ -79,7 +77,7 @@ export default defineComponent({
 
     const document = JSON.parse(props.document);
     console.log('Document:', document);
-    const documentRef = ref<StandardDocument>(document);
+    const documentRef = ref<DocumentBlockDto>(document);
 
     const dirty = ref(false);
     const status = ref<EditorStatus>('idle');
@@ -112,11 +110,11 @@ export default defineComponent({
       return this.isEmptyDocument ? 'Beginne zu schreiben..' : undefined;
     },
     isEmptyDocument() {
-      if (this.document.blocks.length > 1) {
+      if (this.document.children.length > 1) {
         return false;
       }
 
-      for (const block of this.document.blocks) {
+      for (const block of this.document.children) {
         if ('text' in block.content && block.content.text.trim().length) {
           return false;
         }
@@ -127,7 +125,7 @@ export default defineComponent({
   },
   mounted() {
     // Focus end of the document
-    const lastBlock = this.document.blocks.at(-1);
+    const lastBlock = this.document.children.at(-1);
 
     if (lastBlock?.type === 'rich-text') {
       const lastSpan = lastBlock.content.spans.at(-1);
@@ -290,9 +288,9 @@ export default defineComponent({
 
       this.updateEditorState(newState);
     },
-    insertBlock(block: StandardBlock, atIndex?: number) {
-      const index = atIndex ?? this.document.blocks.length;
-      this.document.blocks.splice(index, 0, block);
+    insertBlock(block: StandardBlockDto, atIndex?: number) {
+      const index = atIndex ?? this.document.children.length;
+      this.document.children.splice(index, 0, block);
       this.dirty = true;
       // TODO: migrate to block-editor
       this.$nextTick(() => {
@@ -404,7 +402,7 @@ export default defineComponent({
         source: file,
       };
 
-      const newBlock: FileRefBlock = {
+      const newBlock: FileBlockDto = {
         id: crypto.randomUUID(),
         type: 'file-ref',
         content: {
@@ -412,6 +410,7 @@ export default defineComponent({
           name: file.name.split('.').at(0) ?? file.name,
           type: file.type,
         },
+        children: [],
       };
 
       this.insertBlock(newBlock, atIndex);
@@ -436,12 +435,9 @@ export default defineComponent({
         return;
       }
 
-      const result = await withConstantTime(async () => {
-        const result = await this.onUpload(file.source, this.document.id, id);
-        return result;
-      }, 1000);
+      const result = await withConstantTime(async () => this.onUpload?.(file.source, this.document.id, id), 1000);
 
-      if (this.files[id]) {
+      if (result && this.files[id]) {
         this.files[id].state = result;
       }
     },
@@ -451,7 +447,6 @@ export default defineComponent({
     FileBlock,
     TitleBlock,
     RootWrapper,
-    HeadingBlock,
     UnknownBlock,
     BlockWrapper,
     RichTextBlock,

@@ -1,11 +1,10 @@
 <template>
   <RootWrapper>
-    <TitleBlock :title="document.title" />
+    <TitleBlock :title="document.content.title" />
 
     <div class="blocks">
-      <template v-for="block in document.blocks">
+      <template v-for="block in document.children">
         <RichTextBlock v-if="block.type === 'rich-text'" :block="block" />
-        <HeadingBlock v-else-if="block.type === 'heading'" :block="block" />
         <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :source="getFileSourceUrl(block.content.id)"
           :editable="false" />
       </template>
@@ -21,11 +20,11 @@
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
 import FileBlock from './FileBlock.vue';
-import HeadingBlock from './HeadingBlock.vue';
 import RichTextBlock from './RichTextBlock.vue';
 import TitleBlock from './TitleBlock.vue';
 import BlockWrapper from './BlockWrapper.vue';
 import RootWrapper from './RootWrapper.vue';
+import type { DocumentBlock } from 'bun-utilities/cms';
 
 export default defineComponent({
   props: {
@@ -41,7 +40,7 @@ export default defineComponent({
       throw new Error('Missing dependencies');
     }
 
-    const document = JSON.parse(props.document);
+    const document: DocumentBlock = JSON.parse(props.document);
     console.log('Document:', document);
 
     return {
@@ -53,7 +52,6 @@ export default defineComponent({
     FileBlock,
     TitleBlock,
     RootWrapper,
-    HeadingBlock,
     BlockWrapper,
     RichTextBlock,
   },

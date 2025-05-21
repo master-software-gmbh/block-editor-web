@@ -7,13 +7,13 @@
 </template>
 
 <script lang="ts">
-import type { CmsBlock } from 'bun-utilities/cms';
+import type { BaseBlock } from 'bun-utilities/cms';
 import { defineComponent, type PropType } from 'vue';
 
 export default defineComponent({
   props: {
     block: {
-      type: Object as PropType<CmsBlock>,
+      type: Object as PropType<BaseBlock>,
       required: true,
     },
   },

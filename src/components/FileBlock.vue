@@ -33,7 +33,7 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
 import AudioPlayer from './AudioPlayer.vue';
-import type { FileRefBlock } from 'bun-utilities/cms';
+import type { FileBlockDto } from 'bun-utilities/cms';
 import type { CmsFile } from '../types';
 import LoadingSpinnerIcon from './icons/LoadingSpinnerIcon.vue';
 import WarningIcon from './icons/WarningIcon.vue';
@@ -42,7 +42,7 @@ import ImageThumbnail from './ImageThumbnail.vue';
 export default defineComponent({
   props: {
     block: {
-      type: Object as PropType<FileRefBlock>,
+      type: Object as PropType<FileBlockDto>,
       required: true,
     },
     file: {

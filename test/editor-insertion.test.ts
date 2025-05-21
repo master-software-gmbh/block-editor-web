@@ -11,16 +11,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'ello world',
               spans: [
                 {
                   text: 'ello world',
@@ -43,16 +44,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello world',
@@ -89,16 +91,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello world',
@@ -121,16 +124,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello, world',
               spans: [
                 {
                   text: 'Hello, world',
@@ -167,16 +171,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello world',
@@ -199,16 +204,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello world!',
@@ -245,16 +251,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'ello world',
               spans: [
                 {
                   text: 'ello world',
@@ -281,16 +288,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello world!',
@@ -327,16 +335,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello',
@@ -371,16 +380,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!!',
               spans: [
                 {
                   text: 'Hello',
@@ -429,16 +439,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello world',
@@ -467,16 +478,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!!',
               spans: [
                 {
                   text: 'Hello world',
@@ -519,16 +531,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello world',
@@ -557,16 +570,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'HelloHello world!',
               spans: [
                 {
                   text: 'HelloHello world',
@@ -609,16 +623,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello',
@@ -653,16 +668,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello worldworld!',
               spans: [
                 {
                   text: 'Hello',
@@ -711,16 +727,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!',
               spans: [
                 {
                   text: 'Hello',
@@ -755,16 +772,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world!!!!',
               spans: [
                 {
                   text: 'Hello',
@@ -813,16 +831,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello Hello bold world world',
               spans: [
                 {
                   text: 'Hello Hello',
@@ -870,16 +889,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello b world',
               spans: [
                 {
                   text: 'Hello b world',
@@ -917,16 +937,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -955,16 +976,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -981,9 +1003,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId2,
             content: {
-              text: '',
               spans: [
                 {
                   text: '',
@@ -1020,16 +1042,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1058,16 +1081,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello ',
               spans: [
                 {
                   text: 'Hello',
@@ -1084,9 +1108,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId2,
             content: {
-              text: 'world',
               spans: [
                 {
                   text: 'world',
@@ -1126,16 +1150,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1152,9 +1177,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId3,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1183,16 +1208,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: '',
               spans: [
                 {
                   text: '',
@@ -1203,9 +1229,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId2,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1222,9 +1248,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId3,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1269,16 +1295,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'The quick brown fox',
               spans: [
                 {
                   text: 'The',
@@ -1299,9 +1326,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId3,
             content: {
-              text: 'jumps over the lazy',
               spans: [
                 {
                   text: 'jumps over the',
@@ -1318,9 +1345,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId4,
             content: {
-              text: 'dog.',
               spans: [
                 {
                   text: 'dog.',
@@ -1351,16 +1378,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'The quick brown',
               spans: [
                 {
                   text: 'The',
@@ -1377,9 +1405,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId2,
             content: {
-              text: 'the lazy',
               spans: [
                 {
                   text: 'the',
@@ -1396,9 +1424,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId4,
             content: {
-              text: 'dog.',
               spans: [
                 {
                   text: 'dog.',
@@ -1435,16 +1463,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1473,16 +1502,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello worldHello\nworld',
               spans: [
                 {
                   text: 'Hello',
@@ -1526,16 +1556,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1564,16 +1595,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello worldHello',
               spans: [
                 {
                   text: 'Hello',
@@ -1590,9 +1622,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId2,
             content: {
-              text: 'world',
               spans: [
                 {
                   text: 'world',
@@ -1629,16 +1661,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1666,16 +1699,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'ABCTest Document',
+        type: 'document',
+        content: {
+          title: 'ABCTest Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1717,16 +1751,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1754,16 +1789,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test DocumentABC',
+        type: 'document',
+        content: {
+          title: 'Test DocumentABC',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1806,16 +1842,17 @@ describe('BlockEditor', () => {
 
     const state = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',
@@ -1843,16 +1880,17 @@ describe('BlockEditor', () => {
 
     const expectedState = new EditorState(
       {
-        createdAt: date,
-        updatedAt: date,
-        title: 'Test Document',
+        type: 'document',
+        content: {
+          title: 'Test Document',
+        },
         id: documentId,
-        blocks: [
+        children: [
           {
             type: 'rich-text',
+            children: [],
             id: blockId2,
             content: {
-              text: '',
               spans: [
                 {
                   text: '',
@@ -1863,9 +1901,9 @@ describe('BlockEditor', () => {
           },
           {
             type: 'rich-text',
+            children: [],
             id: blockId,
             content: {
-              text: 'Hello world',
               spans: [
                 {
                   text: 'Hello',

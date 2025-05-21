@@ -1,12 +1,12 @@
-import type { RichTextAttributeType, StandardDocument } from 'bun-utilities/cms';
+import type { RichTextAttributeType, DocumentBlockDto } from 'bun-utilities/cms';
 
 export type EditorStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export class EditorState {
-  readonly document: StandardDocument;
+  readonly document: DocumentBlockDto;
   readonly selection: EditorRange;
 
-  constructor(document: StandardDocument, selection: EditorRange) {
+  constructor(document: DocumentBlockDto, selection: EditorRange) {
     this.document = document;
     this.selection = selection;
   }

@@ -1,4 +1,4 @@
-import type { StandardDocument } from 'bun-utilities/cms';
+import type { StandardBlockDto } from 'bun-utilities/cms';
 
 const DataTransferNamespace = 'de.master-software.cms';
 
@@ -17,7 +17,7 @@ export interface EditorConfiguration {
     fileUpload: boolean;
   };
   callbacks: {
-    onSave: (document: StandardDocument) => Promise<void>;
+    onSave: (document: StandardBlockDto) => Promise<void>;
     onExit: () => void;
     onUpload?: (data: File, documentId: string, fileId: string) => Promise<'uploaded' | 'error'>;
     getFileSourceUrl?: (fileId: string) => string;
