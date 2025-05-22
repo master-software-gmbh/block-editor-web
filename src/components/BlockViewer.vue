@@ -18,13 +18,13 @@
 </template>
 
 <script lang="ts">
+import type { DocumentBlock } from 'bun-utilities/cms';
 import { defineComponent, inject } from 'vue';
+import BlockWrapper from './BlockWrapper.vue';
 import FileBlock from './FileBlock.vue';
 import RichTextBlock from './RichTextBlock.vue';
-import TitleBlock from './TitleBlock.vue';
-import BlockWrapper from './BlockWrapper.vue';
 import RootWrapper from './RootWrapper.vue';
-import type { DocumentBlock } from 'bun-utilities/cms';
+import TitleBlock from './TitleBlock.vue';
 
 export default defineComponent({
   props: {

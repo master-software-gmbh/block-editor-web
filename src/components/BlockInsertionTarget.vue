@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject } from 'vue';
+import { defineComponent, inject, ref } from 'vue';
 import { DataTransferPayload, type EditorConfiguration } from '../types';
 
 export default defineComponent({
@@ -50,7 +50,7 @@ export default defineComponent({
 
       if (event.dataTransfer.items) {
         [...event.dataTransfer.items].forEach((item, i) => {
-          if (item.kind === "file") {
+          if (item.kind === 'file') {
             const file = item.getAsFile();
 
             if (file) {
@@ -63,7 +63,6 @@ export default defineComponent({
           this.$emit('file', file);
         });
       }
-
     },
   },
 });

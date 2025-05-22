@@ -1,14 +1,14 @@
 import type {
-  RichTextBlockDto,
-  RichTextSpanDto,
   DocumentBlockDto,
   RichTextAttributeType,
+  RichTextBlockDto,
+  RichTextSpanDto,
   StandardBlockDto,
 } from 'bun-utilities/cms';
+import { byId, compose, createLens } from 'bun-utilities/lenses';
 import { logger } from 'bun-utilities/logging';
 import { compareRecords } from 'bun-utilities/map';
-import { createLens, compose, byId } from 'bun-utilities/lenses';
-import { EditorState, type BlockEditorAction, type EditorRange, type RichTextRange } from './types';
+import { type BlockEditorAction, type EditorRange, EditorState, type RichTextRange } from './types';
 
 logger.format = 'logfmt';
 

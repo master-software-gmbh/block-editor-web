@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { EditorState, type BlockEditorAction } from '../src/editor/types';
 import { BlockEditor } from '../src/editor/block-editor';
+import { type BlockEditorAction, EditorState } from '../src/editor/types';
 
 const date = new Date().toISOString();
 const documentId = '95f20aea-f289-4046-aa82-966338f6a0f0';

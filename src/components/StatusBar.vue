@@ -14,10 +14,10 @@
 
 <script lang="ts">
 import type { DocumentBlockDto } from 'bun-utilities/cms';
-import { defineComponent, type PropType } from 'vue';
+import { type PropType, defineComponent } from 'vue';
+import type { EditorStatus } from '../editor/types';
 import CheckCircleIcon from './icons/CheckCircleIcon.vue';
 import LoadingSpinnerIcon from './icons/LoadingSpinnerIcon.vue';
-import type { EditorStatus } from '../editor/types';
 
 export default defineComponent({
   props: {
@@ -71,8 +71,8 @@ export default defineComponent({
   components: {
     CheckCircleIcon,
     LoadingSpinnerIcon,
-  }
-})
+  },
+});
 </script>
 
 <style lang="css" scoped>

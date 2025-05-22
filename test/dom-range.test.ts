@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'bun:test';
 import { GlobalRegistrator } from '@happy-dom/global-registrator';
-import { expect, it, describe } from 'bun:test';
 import { HTMLBlockEditor } from '../src/editor/html-editor';
 import type { EditorRange } from '../src/editor/types';
 

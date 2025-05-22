@@ -1,6 +1,6 @@
 import type { DocumentBlockDto, RichTextAttributeType } from 'bun-utilities/cms';
-import { EditorState, type BlockEditorAction, type EditorRange } from './types';
 import { BlockEditor } from './block-editor';
+import { type BlockEditorAction, type EditorRange, EditorState } from './types';
 
 type Title = {
   type: 'title';

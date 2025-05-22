@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import type { PlainTextBlock } from 'bun-utilities/cms';
-import { defineComponent, type PropType } from 'vue';
+import { type PropType, defineComponent } from 'vue';
 
 export default defineComponent({
   props: {

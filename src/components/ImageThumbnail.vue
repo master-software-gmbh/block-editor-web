@@ -23,7 +23,7 @@ export default defineComponent({
       setPreview(this.source);
     },
   },
-})
+});
 </script>
 
 <style lang="css" scoped>

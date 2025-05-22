@@ -35,7 +35,7 @@ export default defineComponent({
       this.isDragged = false;
     },
   },
-})
+});
 </script>
 
 <style lang="css">

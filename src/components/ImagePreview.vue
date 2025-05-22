@@ -17,8 +17,8 @@ export default defineComponent({
     return {
       preview,
       setPreview,
-    }
-  }
+    };
+  },
 });
 </script>
 

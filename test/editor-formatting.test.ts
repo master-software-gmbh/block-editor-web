@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { EditorState, type BlockEditorAction } from '../src/editor/types';
 import { BlockEditor } from '../src/editor/block-editor';
+import { type BlockEditorAction, EditorState } from '../src/editor/types';
 
 const editor = new BlockEditor();
 const date = new Date();

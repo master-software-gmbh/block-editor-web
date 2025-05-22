@@ -1,4 +1,4 @@
-import type { RichTextAttributeType, DocumentBlockDto } from 'bun-utilities/cms';
+import type { DocumentBlockDto, RichTextAttributeType } from 'bun-utilities/cms';
 
 export type EditorStatus = 'idle' | 'saving' | 'saved' | 'error';
 

@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import AudioPlayer from './AudioPlayer.vue';
 import type { FileBlockDto } from 'bun-utilities/cms';
+import { type PropType, defineComponent } from 'vue';
 import type { CmsFile } from '../types';
+import AudioPlayer from './AudioPlayer.vue';
+import ImageThumbnail from './ImageThumbnail.vue';
 import LoadingSpinnerIcon from './icons/LoadingSpinnerIcon.vue';
 import WarningIcon from './icons/WarningIcon.vue';
-import ImageThumbnail from './ImageThumbnail.vue';
 
 export default defineComponent({
   props: {

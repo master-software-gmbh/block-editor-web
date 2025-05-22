@@ -32,24 +32,24 @@
 </template>
 
 <script lang="ts">
+import type { DocumentBlockDto, FileBlockDto, StandardBlockDto } from 'bun-utilities/cms';
+import { logger } from 'bun-utilities/logging';
+import { debounce, withConstantTime } from 'bun-utilities/time';
 import { defineComponent, inject, ref } from 'vue';
-import type { EditorConfiguration, CmsFile } from '../types';
+import { HTMLBlockEditor } from '../editor/html-editor';
+import type { EditorState, EditorStatus } from '../editor/types';
+import type { CmsFile, EditorConfiguration } from '../types';
 import { KeyName } from '../utilities';
 import BlockInsertionTarget from './BlockInsertionTarget.vue';
-import FileBlock from './FileBlock.vue';
-import RichTextBlock from './RichTextBlock.vue';
-import PlainTextBlock from './PlainTextBlock.vue';
-import TitleBlock from './TitleBlock.vue';
-import type { FileBlockDto, StandardBlockDto, DocumentBlockDto } from 'bun-utilities/cms';
-import { HTMLBlockEditor } from '../editor/html-editor';
-import UnknownBlock from './UnknownBlock.vue';
 import BlockWrapper from './BlockWrapper.vue';
-import { debounce, withConstantTime } from 'bun-utilities/time';
-import type { EditorState, EditorStatus } from '../editor/types';
-import { logger } from 'bun-utilities/logging';
+import FileBlock from './FileBlock.vue';
+import PlainTextBlock from './PlainTextBlock.vue';
+import RichTextBlock from './RichTextBlock.vue';
 import RichTextFloatingBar from './RichTextFloatingBar.vue';
-import StatusBar from './StatusBar.vue';
 import RootWrapper from './RootWrapper.vue';
+import StatusBar from './StatusBar.vue';
+import TitleBlock from './TitleBlock.vue';
+import UnknownBlock from './UnknownBlock.vue';
 
 const htmlEditor = new HTMLBlockEditor();
 
@@ -138,20 +138,20 @@ export default defineComponent({
             spanIndex: lastBlock.content.spans.length - 1,
             startOffset: lastSpan.text.length,
             endOffset: lastSpan.text.length,
-          }
+          },
         ]);
       }
     }
 
     // Listen for selection changes
     const debouncedSelectionChange = debounce(this.handleSelectionChange, 150);
-    document.addEventListener("selectionchange", debouncedSelectionChange);
+    document.addEventListener('selectionchange', debouncedSelectionChange);
 
     // Trigger warning when navigating away
-    window.addEventListener("beforeunload", (event) => {
+    window.addEventListener('beforeunload', (event) => {
       if (this.dirty) {
         event.preventDefault();
-        event.returnValue = "You have unsaved changes. Are you sure you want to leave?";
+        event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
         return event.returnValue;
       }
     });
@@ -226,14 +226,13 @@ export default defineComponent({
       const rect = range.getBoundingClientRect();
       floatingBar.style.top = `${rect.top + window.scrollY - floatingBar.offsetHeight - 10}px`;
       floatingBar.style.left = `${rect.left + window.scrollX - 10}px`;
-
     },
     getPlainInputData(event: InputEvent): string | undefined {
       if (event.data) {
         return event.data;
       }
 
-      return event.dataTransfer?.getData("text/plain");
+      return event.dataTransfer?.getData('text/plain');
     },
     handleFormatBold(range?: Range) {
       const newState = htmlEditor.applyRangeAction(
@@ -269,22 +268,34 @@ export default defineComponent({
       this.updateEditorState(newState);
     },
     handleDeleteContentBackward(range: Range) {
-      const newState = htmlEditor.applyRangeAction(this.document, {
-        type: 'delete_text',
-      }, range);
+      const newState = htmlEditor.applyRangeAction(
+        this.document,
+        {
+          type: 'delete_text',
+        },
+        range,
+      );
       this.updateEditorState(newState);
     },
     handleInsertText(range: Range, text: string) {
-      const newState = htmlEditor.applyRangeAction(this.document, {
-        type: 'insert_text',
-        text: text,
-      }, range);
+      const newState = htmlEditor.applyRangeAction(
+        this.document,
+        {
+          type: 'insert_text',
+          text: text,
+        },
+        range,
+      );
       this.updateEditorState(newState);
     },
     handleInsertParagraph(range: Range) {
-      const newState = htmlEditor.applyRangeAction(this.document, {
-        type: 'insert_paragraph',
-      }, range);
+      const newState = htmlEditor.applyRangeAction(
+        this.document,
+        {
+          type: 'insert_paragraph',
+        },
+        range,
+      );
 
       this.updateEditorState(newState);
     },
@@ -298,10 +309,14 @@ export default defineComponent({
       });
     },
     handlePaste(range: Range, data: string) {
-      const newState = htmlEditor.applyRangeAction(this.document, {
-        type: 'insert_text',
-        text: data,
-      }, range);
+      const newState = htmlEditor.applyRangeAction(
+        this.document,
+        {
+          type: 'insert_text',
+          text: data,
+        },
+        range,
+      );
 
       this.updateEditorState(newState);
     },
@@ -350,7 +365,6 @@ export default defineComponent({
           if (withSpecialKey) return;
           event.preventDefault();
           return this.handleArrowDownKey();
-
       }
     },
     handleArrowUpKey() {
