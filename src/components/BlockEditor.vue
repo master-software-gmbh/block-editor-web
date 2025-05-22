@@ -54,12 +54,6 @@ import UnknownBlock from './UnknownBlock.vue';
 const htmlEditor = new HTMLBlockEditor();
 
 export default defineComponent({
-  props: {
-    document: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props) {
     const config = inject<EditorConfiguration>('config');
 
@@ -75,7 +69,7 @@ export default defineComponent({
       throw new Error('Missing getFileSourceUrl callback');
     }
 
-    const document = JSON.parse(props.document);
+    const document = inject<DocumentBlockDto>('data');
     console.log('Document:', document);
     const documentRef = ref<DocumentBlockDto>(document);
 

@@ -7,21 +7,24 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      include: 'src/types.ts',
+      include: ['src/types.ts'],
     }),
   ],
+  resolve: {
+    alias: {
+      vue: resolve(__dirname, 'node_modules/vue/dist/vue.esm-browser.prod.js'),
+    },
+  },
   build: {
     lib: {
       formats: ['es'],
       fileName: (_, entryName) => `${entryName}.min.js`,
       cssFileName: 'block-editor.min',
       entry: {
-        'block-editor': resolve(__dirname, 'src/lib/editor.ts'),
-        'block-viewer': resolve(__dirname, 'src/lib/viewer.ts'),
+        'block-editor': resolve(__dirname, 'lib/editor.ts'),
+        'block-viewer': resolve(__dirname, 'lib/viewer.ts'),
+        setup: resolve(__dirname, 'lib/setup.ts'),
       },
-    },
-    rollupOptions: {
-      external: ['vue'],
     },
   },
 });

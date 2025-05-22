@@ -16,6 +16,7 @@ export interface EditorConfiguration {
   features: {
     fileUpload: boolean;
   };
+  saveEndpoint?: string;
   callbacks: {
     onSave: (document: StandardBlockDto) => Promise<void>;
     onExit: () => void;

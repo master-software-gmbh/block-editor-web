@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import type { DocumentBlock } from 'bun-utilities/cms';
+import type { DocumentBlockDto } from 'bun-utilities/cms';
 import { defineComponent, inject } from 'vue';
 import BlockWrapper from './BlockWrapper.vue';
 import FileBlock from './FileBlock.vue';
@@ -27,12 +27,6 @@ import RootWrapper from './RootWrapper.vue';
 import TitleBlock from './TitleBlock.vue';
 
 export default defineComponent({
-  props: {
-    document: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props) {
     const getFileSourceUrl = inject<(fileId: string) => string>('getFileSourceUrl');
 
@@ -40,7 +34,7 @@ export default defineComponent({
       throw new Error('Missing dependencies');
     }
 
-    const document: DocumentBlock = JSON.parse(props.document);
+    const document = inject<DocumentBlockDto>('data');
     console.log('Document:', document);
 
     return {
