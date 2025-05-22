@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/master-software-gmbh/block-editor-web/compare/v1.1.0...v1.2.0) (2025-05-22)
+
+
+### Features
+
+* add dist output ([bf31c32](https://github.com/master-software-gmbh/block-editor-web/commit/bf31c32e07ba3330757e1782cdd38bbef73b2f0f))
+
 # [1.1.0](https://github.com/master-software-gmbh/block-editor-web/compare/v1.0.0...v1.1.0) (2025-05-22)
 
 
