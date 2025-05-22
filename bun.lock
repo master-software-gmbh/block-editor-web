@@ -5,18 +5,19 @@
       "name": "@master-software/block-editor-web",
       "dependencies": {
         "bun-utilities": "master-software-gmbh/ts-utilities#v1.79.0",
-        "valibot": "^1.0.0",
-        "vue": "^3.5.13",
+        "valibot": "^1.1.0",
+        "vue": "^3.5.14",
       },
       "devDependencies": {
-        "@happy-dom/global-registrator": "^17.4.4",
-        "@types/bun": "^1.2.10",
-        "@types/node": "^22.14.1",
-        "@vitejs/plugin-vue": "^5.2.3",
+        "@happy-dom/global-registrator": "^17.4.7",
+        "@types/bun": "^1.2.13",
+        "@types/node": "^22.15.21",
+        "@vitejs/plugin-vue": "^5.2.4",
         "@vue/tsconfig": "^0.7.0",
+        "hono": "^4.7.10",
         "typescript": "~5.8.3",
-        "vite": "^6.3.2",
-        "vite-plugin-dts": "^4.5.3",
+        "vite": "^6.3.5",
+        "vite-plugin-dts": "^4.5.4",
         "vue-tsc": "^2.2.10",
       },
     },
@@ -243,6 +244,8 @@
     "hasown": ["hasown@2.0.2", "", { "dependencies": { "function-bind": "^1.1.2" } }, "sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ=="],
 
     "he": ["he@1.2.0", "", { "bin": { "he": "bin/he" } }, "sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw=="],
+
+    "hono": ["hono@4.7.10", "", {}, "sha512-QkACju9MiN59CKSY5JsGZCYmPZkA6sIW6OFCUp7qDjZu6S6KHtJHhAc9Uy9mV9F8PJ1/HQ3ybZF2yjCa/73fvQ=="],
 
     "import-lazy": ["import-lazy@4.0.0", "", {}, "sha512-rKtvo6a868b5Hu3heneU+L4yEQ4jYKLtjpnPeUdK7h0yzXGmyBTypknlkCvHFBqfX9YlorEiMM6Dnq/5atfHkw=="],
 

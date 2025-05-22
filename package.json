@@ -7,6 +7,9 @@
     "check": "vue-tsc --build",
     "build": "vite build"
   },
+  "exports": {
+    "./renderer": "./src/renderer/index.ts"
+  },
   "dependencies": {
     "bun-utilities": "master-software-gmbh/ts-utilities#v1.79.0",
     "valibot": "^1.1.0",
@@ -18,6 +21,7 @@
     "@types/node": "^22.15.21",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vue/tsconfig": "^0.7.0",
+    "hono": "^4.7.10",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.4",
