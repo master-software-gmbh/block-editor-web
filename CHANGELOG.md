@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/master-software-gmbh/block-editor-web/compare/v1.0.0...v1.1.0) (2025-05-22)
+
+
+### Features
+
+* bundle vue, add setup function ([fc366eb](https://github.com/master-software-gmbh/block-editor-web/commit/fc366eb136c1a78eeed595ceb55f90856c469180))
+
 # 1.0.0 (2025-05-22)
 
 
