@@ -5,16 +5,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue';
-import { DataTransferPayload, type EditorConfiguration } from '../types';
+import { defineComponent, ref } from 'vue';
+import { DataTransferPayload } from '../types';
+import { Configuration } from '../config';
+import { useConfig } from '../composables/useConfig';
 
 export default defineComponent({
   setup() {
-    const config = inject<EditorConfiguration>('config');
+    const config = useConfig();
 
     return {
       dragging: ref(false),
-      fileUpload: !!config?.features.fileUpload,
+      fileUpload: config.isEnabled(Configuration.Feature.FileUpload),
     };
   },
   methods: {

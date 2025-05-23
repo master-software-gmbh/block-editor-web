@@ -5,8 +5,8 @@
     <div class="blocks">
       <template v-for="block in document.children">
         <RichTextBlock v-if="block.type === 'rich-text'" :block="block" />
-        <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :source="getFileSourceUrl(block.content.id)"
-          :editable="false" />
+        <FileBlock v-else-if="block.type === 'file-ref' && getFileSourceUrl" :block="block"
+          :source="getFileSourceUrl(block.content.id)" :editable="false" />
       </template>
     </div>
 
@@ -18,28 +18,23 @@
 </template>
 
 <script lang="ts">
-import type { DocumentBlockDto } from 'bun-utilities/cms';
-import { defineComponent, inject } from 'vue';
+import { defineComponent } from 'vue';
 import BlockWrapper from './BlockWrapper.vue';
 import FileBlock from './FileBlock.vue';
 import RichTextBlock from './RichTextBlock.vue';
 import RootWrapper from './RootWrapper.vue';
 import TitleBlock from './TitleBlock.vue';
+import { useConfig } from '../composables/useConfig';
+import { useDocument } from '../composables/useDocument';
 
 export default defineComponent({
-  setup(props) {
-    const getFileSourceUrl = inject<(fileId: string) => string>('getFileSourceUrl');
-
-    if (!getFileSourceUrl) {
-      throw new Error('Missing dependencies');
-    }
-
-    const document = inject<DocumentBlockDto>('data');
-    console.log('Document:', document);
+  setup() {
+    const config = useConfig();
+    const document = useDocument();
 
     return {
       document: document,
-      getFileSourceUrl: getFileSourceUrl,
+      getFileSourceUrl: config.callbacks.getFileSourceUrl,
     };
   },
   components: {

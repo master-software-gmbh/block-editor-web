@@ -11,8 +11,8 @@
         <BlockWrapper :block-id="block.id">
           <RichTextBlock v-if="block.type === 'rich-text'" :block="block"
             :placeholder="index === 0 ? placeholder : undefined" />
-          <FileBlock v-else-if="block.type === 'file-ref'" :block="block" :file="files[block.content.id]"
-            :source="getFileSourceUrl(block.content.id)" @remove="handleRemoveBlock" />
+          <FileBlock v-else-if="block.type === 'file-ref' && getFileSourceUrl" :block="block"
+            :file="files[block.content.id]" :source="getFileSourceUrl(block.content.id)" @remove="handleRemoveBlock" />
           <UnknownBlock v-else="block.type" :block="block" />
         </BlockWrapper>
       </template>
@@ -35,10 +35,10 @@
 import type { DocumentBlockDto, FileBlockDto, StandardBlockDto } from 'bun-utilities/cms';
 import { logger } from 'bun-utilities/logging';
 import { debounce, withConstantTime } from 'bun-utilities/time';
-import { defineComponent, inject, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { HTMLBlockEditor } from '../editor/html-editor';
 import type { EditorState, EditorStatus } from '../editor/types';
-import type { CmsFile, EditorConfiguration } from '../types';
+import type { CmsFile } from '../types';
 import { KeyName } from '../utilities';
 import BlockInsertionTarget from './BlockInsertionTarget.vue';
 import BlockWrapper from './BlockWrapper.vue';
@@ -50,27 +50,15 @@ import RootWrapper from './RootWrapper.vue';
 import StatusBar from './StatusBar.vue';
 import TitleBlock from './TitleBlock.vue';
 import UnknownBlock from './UnknownBlock.vue';
+import { useConfig } from '../composables/useConfig';
+import { useDocument } from '../composables/useDocument';
 
 const htmlEditor = new HTMLBlockEditor();
 
 export default defineComponent({
-  setup(props) {
-    const config = inject<EditorConfiguration>('config');
-
-    if (!config) {
-      throw new Error('Missing dependencies');
-    }
-
-    if (config.features.fileUpload && !config.callbacks.onUpload) {
-      throw new Error('Missing onUpload callback');
-    }
-
-    if (config.features.fileUpload && !config.callbacks.getFileSourceUrl) {
-      throw new Error('Missing getFileSourceUrl callback');
-    }
-
-    const document = inject<DocumentBlockDto>('data');
-    console.log('Document:', document);
+  setup() {
+    const config = useConfig();
+    const document = useDocument();
     const documentRef = ref<DocumentBlockDto>(document);
 
     const dirty = ref(false);
@@ -80,7 +68,7 @@ export default defineComponent({
       status.value = 'saving';
 
       await withConstantTime(async () => {
-        await config.callbacks.onSave(documentRef.value);
+        await config.callbacks.onSave?.(documentRef.value);
       }, 1000);
 
       dirty.value = false;
@@ -377,9 +365,9 @@ export default defineComponent({
       logger.debug('Select All pressed');
     },
     async handleSave() {
-      await this.onSave(this.document);
+      await this.onSave?.(this.document);
       this.dirty = false;
-      this.onExit();
+      this.onExit?.();
     },
     handleAddFile(event: Event) {
       if (event.target instanceof HTMLInputElement && event.target.files) {

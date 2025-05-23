@@ -11,16 +11,3 @@ export interface CmsFile {
   type: 'audio' | 'image';
   state: 'pending' | 'uploaded' | 'error';
 }
-
-export interface EditorConfiguration {
-  features: {
-    fileUpload: boolean;
-  };
-  saveEndpoint?: string;
-  callbacks: {
-    onSave: (document: StandardBlockDto) => Promise<void>;
-    onExit: () => void;
-    onUpload?: (data: File, documentId: string, fileId: string) => Promise<'uploaded' | 'error'>;
-    getFileSourceUrl?: (fileId: string) => string;
-  };
-}
