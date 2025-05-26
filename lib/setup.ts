@@ -1,21 +1,35 @@
 import { createApp } from 'vue';
 import { BlockEditor } from './editor';
+import { BlockViewer, RootWrapper, ImageThumbnail } from './viewer';
 import '../src/main.css';
 import { Configuration, type EditorConfiguration } from '../src/config';
 
-export function setupEditor(config: EditorConfiguration, rootId = 'app', dataId = 'cms-document') {
-  const container = document.getElementById(rootId);
-  const content = document.getElementById(dataId)?.textContent;
+export function setupEditor(
+  config: EditorConfiguration,
+  container: string | Element | null = '#app',
+  dataElement: string | Element | null = '#cms-document',
+) {
+  if (typeof container === 'string') {
+    container = document.querySelector(container);
+  }
+
+  if (typeof dataElement === 'string') {
+    dataElement = document.querySelector(dataElement);
+  }
+
+  const content = dataElement?.textContent;
 
   if (!container) {
     throw new Error('Container not found');
   }
 
-  if (!content) {
-    throw new Error('Content not found');
+  let template: string | undefined;
+
+  if (!container.hasChildNodes()) {
+    template = '<BlockEditor />';
   }
 
-  const data = JSON.parse(content);
+  const data = content ? JSON.parse(content) : undefined;
 
   const app = createApp({
     provide: {
@@ -24,10 +38,11 @@ export function setupEditor(config: EditorConfiguration, rootId = 'app', dataId 
     },
     components: {
       BlockEditor,
+      BlockViewer,
+      RootWrapper,
+      ImageThumbnail,
     },
-    template: `
-      <BlockEditor />
-    `,
+    template: template,
   });
 
   app.mount(container);
