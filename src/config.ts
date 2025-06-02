@@ -1,4 +1,4 @@
-import type { StandardBlockDto } from 'bun-utilities/cms';
+import type { StandardBlockDto } from 'ts-utilities/cms';
 
 type SaveFunction = (document: StandardBlockDto) => Promise<void>;
 type Feature = (typeof Configuration.Feature)[keyof typeof Configuration.Feature];

@@ -1,4 +1,4 @@
-import type { StandardBlockDto } from 'bun-utilities/cms';
+import type { StandardBlockDto } from 'ts-utilities/cms';
 
 const DataTransferNamespace = 'de.master-software.cms';
 

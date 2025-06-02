@@ -1,4 +1,4 @@
-import type { DocumentBlockDto, RichTextAttributeType } from 'bun-utilities/cms';
+import type { DocumentBlockDto, RichTextAttributeType } from 'ts-utilities/cms';
 import { BlockEditor } from './block-editor';
 import { type BlockEditorAction, type EditorRange, EditorState } from './types';
 

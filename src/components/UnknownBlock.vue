@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import type { BaseBlock } from 'bun-utilities/cms';
+import type { BaseBlock } from 'ts-utilities/cms';
 import { type PropType, defineComponent } from 'vue';
 
 export default defineComponent({

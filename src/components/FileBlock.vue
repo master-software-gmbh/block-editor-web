@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import type { FileBlockDto } from 'bun-utilities/cms';
+import type { FileBlockDto } from 'ts-utilities/cms';
 import { type PropType, defineComponent } from 'vue';
 import type { CmsFile } from '../types';
 import AudioPlayer from './AudioPlayer.vue';

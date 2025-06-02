@@ -1,7 +1,7 @@
 /** @jsxImportSource hono/jsx */
-import type { DocumentBlock, PlainTextBlock, RichTextBlock, StandardBlock } from 'bun-utilities/cms';
+import type { DocumentBlock, PlainTextBlock, RichTextBlock, StandardBlock } from 'ts-utilities/cms';
 import type { BlockRenderer } from './interface';
-import 'bun-utilities/array';
+import 'ts-utilities/array';
 import type { JSX } from 'hono/jsx/jsx-runtime';
 
 export class HonoJsxBlockRenderer implements BlockRenderer {

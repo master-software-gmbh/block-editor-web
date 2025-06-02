@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts">
-import type { DocumentBlockDto, FileBlockDto, StandardBlockDto } from 'bun-utilities/cms';
-import { logger } from 'bun-utilities/logging';
-import { debounce, withConstantTime } from 'bun-utilities/time';
+import type { DocumentBlockDto, FileBlockDto, StandardBlockDto } from 'ts-utilities/cms';
+import { logger } from 'ts-utilities/logging';
+import { debounce, withConstantTime } from 'ts-utilities/time';
 import { defineComponent, ref } from 'vue';
 import { HTMLBlockEditor } from '../editor/html-editor';
 import type { EditorState, EditorStatus } from '../editor/types';

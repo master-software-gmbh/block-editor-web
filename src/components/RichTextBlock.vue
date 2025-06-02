@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import type { RichTextBlockDto } from 'bun-utilities/cms';
+import type { RichTextBlockDto } from 'ts-utilities/cms';
 import { type PropType, defineComponent } from 'vue';
 
 export default defineComponent({

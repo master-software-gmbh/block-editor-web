@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import type { PlainTextBlock } from 'bun-utilities/cms';
+import type { PlainTextBlock } from 'ts-utilities/cms';
 import { type PropType, defineComponent } from 'vue';
 
 export default defineComponent({

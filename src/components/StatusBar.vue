@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import type { DocumentBlockDto } from 'bun-utilities/cms';
+import type { DocumentBlockDto } from 'ts-utilities/cms';
 import { type PropType, defineComponent } from 'vue';
 import type { EditorStatus } from '../editor/types';
 import CheckCircleIcon from './icons/CheckCircleIcon.vue';

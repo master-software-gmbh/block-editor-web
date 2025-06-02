@@ -4,10 +4,10 @@ import type {
   RichTextBlockDto,
   RichTextSpanDto,
   StandardBlockDto,
-} from 'bun-utilities/cms';
-import { byId, compose, createLens } from 'bun-utilities/lenses';
-import { logger } from 'bun-utilities/logging';
-import { compareRecords } from 'bun-utilities/map';
+} from 'ts-utilities/cms';
+import { byId, compose, createLens } from 'ts-utilities/lenses';
+import { logger } from 'ts-utilities/logging';
+import { compareRecords } from 'ts-utilities/map';
 import { type BlockEditorAction, type EditorRange, EditorState, type RichTextRange } from './types';
 
 logger.format = 'logfmt';

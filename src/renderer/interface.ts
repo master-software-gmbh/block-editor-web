@@ -1,4 +1,4 @@
-import type { DocumentBlock, PlainTextBlock, RichTextBlock, StandardBlock } from 'bun-utilities/cms';
+import type { DocumentBlock, PlainTextBlock, RichTextBlock, StandardBlock } from 'ts-utilities/cms';
 
 export interface BlockRenderer {
   renderStandardBlock(block: StandardBlock): Promise<string>;
