@@ -5498,7 +5498,7 @@ function Ch(e, t, n, r, s, i) {
     _: 1
   });
 }
-const kh = /* @__PURE__ */ Ot(Sh, [["render", Ch], ["__scopeId", "data-v-97c3ab0e"]]), Th = Nt({
+const kh = /* @__PURE__ */ Ot(Sh, [["render", Ch], ["__scopeId", "data-v-bfcb729c"]]), Th = Nt({
   components: {
     ImagePreview: kh
   }
